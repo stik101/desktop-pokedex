@@ -18,22 +18,29 @@ DESCRIPTION
 @onready var api_entry: HTTPRequest = $PokeAPI/APIEntry
 
 # SEARCH BAR STUFF GO HERE
-@onready var search_bar:TextEdit = $TextEdit
-@onready var search_button:Button = $Button
+@export var search_bar:LineEdit
+@export var search_button:Button
 @onready var output: Label = $Output
 @onready var poke_cry: AudioStreamPlayer = $PokeCry
 
 # MINI DEX STUFF GO HERE
+var mouse_offset = Vector2.ZERO
+@export var draggable_area:Sprite2D
+@export var dex:Node2D
 @export var dex_anim:AnimationPlayer
+@export var search_bar_anim:AnimationPlayer
 @onready var dex_sprites:Node2D = $DemoDex/DexSprites
 @export var poke_image: TextureRect
+@export var search_toggle:TextureButton
 var is_open:bool = false
 @export var closed_sprite:Sprite2D
 @export var open_sprite:Sprite2D
 var current_sprite:Sprite2D
 var is_hovering:bool = false
 var is_waiting:bool = true
-
+var is_dragging:bool = false
+var is_search_bar_open:bool = true
+var is_mouse_on_search_toggle:bool = false
 @export var entry_text_label:Label
 
 # Pokemon Cry SFX
@@ -51,17 +58,13 @@ var entry_link:String = "https://pokeapi.co/api/v2/pokemon-species/"
 
 # Connect a lota signals (mostly of APIs)
 func _ready() -> void:
+	entry_text_label.modulate = Color("ffeb0000")
 	current_sprite = closed_sprite
 	api.request_completed.connect(_on_request_pokedata)
 	search_button.pressed.connect(search)
 	api_image.request_completed.connect(_on_request_pokeimage)
 	api_cry.request_completed.connect(_on_request_pokecry)
 	api_entry.request_completed.connect(_on_request_pokeentry)
-	print("=====================")
-	print("API IMAGE: ", api_image)
-	print("PROCESS MODE: ", api_image.process_mode)
-	print("INSIDE TREE: ", api_image.is_inside_tree())
-	print("=========================")
 
 # For search bar field
 func search() -> void:
@@ -198,12 +201,14 @@ func _on_request_pokeentry(result:int, response_code:int, headers:PackedStringAr
 	
 	print("\n", JSON.stringify(p_entry))
 func _process(delta: float) -> void:
+	if is_dragging:
+		dex.global_position = get_global_mouse_position() + mouse_offset
 	# HANDLES THE HOVER POKEDEX FEATURE
 	if not is_open:
 		if closed_sprite.get_rect().has_point(closed_sprite.to_local(get_global_mouse_position())):
-			dex_sprites.scale = Vector2(1.1, 1.1)
+			dex_sprites.modulate = Color("e4e4e4")
 		else:
-			dex_sprites.scale = Vector2(1, 1)
+			dex_sprites.modulate = Color("ffffff")
 	else:
 		if entry_text_label.text != '':
 			# HANDLES THE MARQUEE EFFECT IN ENTRLY LABEL
@@ -212,7 +217,7 @@ func _process(delta: float) -> void:
 			# Start of effect
 			if is_waiting:
 				await get_tree().create_timer(1).timeout 
-				await get_tree().create_tween().tween_property(entry_text_label, "modulate:a", 1.0, 0.0).finished
+				await get_tree().create_tween().tween_property(entry_text_label, "modulate:a", 1.0, 0.5).finished
 				await get_tree().create_timer(1).timeout
 				is_waiting = false
 			else:
@@ -220,23 +225,32 @@ func _process(delta: float) -> void:
 					entry_text_label.position.x -= scroll_speed
 				else:
 					is_waiting = true
-					entry_text_label.position.x = 0
+					entry_text_label.position.x = 5
 					entry_text_label.modulate.a = 0.0
 		
 # To flip open the pokedex
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.is_pressed():
-				# Check whether the click is on the sprite.
-				var local_mouse := current_sprite.to_local(event.position) # position of mouse wrt sprite
-				# checks if the point is in the sprite area
-				if current_sprite.get_rect().has_point(local_mouse):
-					if is_open:
-						current_sprite = open_sprite
-						dex_anim.play("closed")
-						is_open = false
-					else:
+		if event.button_index != MOUSE_BUTTON_LEFT:
+			return
+		if search_toggle.get_global_rect().has_point(event.position):
+				return
+		if event.pressed:
+			if draggable_area.get_rect().has_point(draggable_area.to_local(event.position)):
+				search_bar_anim.play("popdown")
+				is_search_bar_open = true
+				mouse_offset = dex.global_position - get_global_mouse_position()
+				is_dragging = true
+				return
+		else:
+			if is_dragging:
+				is_dragging = false
+				return
+			if current_sprite.get_rect().has_point(current_sprite.to_local(event.position)):
+				get_viewport().set_input_as_handled()
+
+				if not is_open:
+					if not is_mouse_on_search_toggle:
 						current_sprite = closed_sprite
 						dex_anim.play("open")
 						is_open = true
@@ -245,3 +259,27 @@ func _input(event: InputEvent) -> void:
 
 func _on_cry_button_pressed() -> void:
 	poke_cry.play()
+
+
+func _on_close_button_pressed() -> void:
+	current_sprite = open_sprite
+	dex_anim.play("closed")
+	is_open = false
+
+
+
+
+func search_bar_toggle() -> void:
+	is_search_bar_open = !is_search_bar_open
+	if is_search_bar_open:
+		search_bar_anim.play("popdown")
+	else:
+		search_bar_anim.play("popup")
+
+
+func _on_search_button_mouse_entered() -> void:
+	is_mouse_on_search_toggle = true
+
+
+func _on_search_button_mouse_exited() -> void:
+	is_mouse_on_search_toggle = false

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bhdm7n32vtbyp"
+path="res://.godot/imported/dex shut.ogg-e534fd52b9df4311284aef2efe2455ca.oggvorbisstr"
+
+[deps]
+
+source_file="res://ASSETS/dex shut.ogg"
+dest_files=["res://.godot/imported/dex shut.ogg-e534fd52b9df4311284aef2efe2455ca.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

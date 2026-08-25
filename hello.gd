@@ -12,7 +12,6 @@ func _ready() -> void:
 
 
 func set_passthrough() -> void:
-	
 	# 1. trying to set the polygon
 	var window_size := DisplayServer.window_get_size()
 

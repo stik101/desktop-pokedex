@@ -1,8 +1,15 @@
-[gd_scene load_steps=11 format=3 uid="uid://b6qqwi7forvta"]
+[gd_scene load_steps=23 format=3 uid="uid://b6qqwi7forvta"]
 
 [ext_resource type="Script" uid="uid://bl5vlwt6f4ao3" path="res://script/pokedex.gd" id="1_c5by8"]
 [ext_resource type="Texture2D" uid="uid://cbg2v5ttd7nky" path="res://pokedex base sprite.png" id="2_47d2q"]
 [ext_resource type="Texture2D" uid="uid://bbke23mty1mp8" path="res://pokedex open sprite.png" id="3_1nn0o"]
+[ext_resource type="FontFile" uid="uid://b1gojr171rwxj" path="res://ASSETS/Fake Receipt.otf" id="4_nbopf"]
+[ext_resource type="Texture2D" uid="uid://wkly2kb36n3w" path="res://draggable base.png" id="4_o8jjn"]
+[ext_resource type="Texture2D" uid="uid://lj5krn02mgxl" path="res://ASSETS/search button.png" id="6_jraj3"]
+[ext_resource type="AudioStream" uid="uid://bhdm7n32vtbyp" path="res://ASSETS/dex shut.ogg" id="6_nbopf"]
+[ext_resource type="Texture2D" uid="uid://8umg375nq5lx" path="res://ASSETS/search normal.png" id="8_kavgq"]
+[ext_resource type="Texture2D" uid="uid://idu8edee5x06" path="res://ASSETS/search hover.png" id="9_nregg"]
+[ext_resource type="Texture2D" uid="uid://dx6eeb3ri7fye" path="res://ASSETS/search pressed.png" id="10_yehji"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_47d2q"]
 bg_color = Color(1, 0.309804, 0.309804, 1)
@@ -45,10 +52,34 @@ tracks/2/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SearchButton:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SearchButton:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(3, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_j5v65"]
 resource_name = "closed"
-length = 0.5
+length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -85,45 +116,44 @@ tracks/2/keys = {
 "update": 0,
 "values": [Vector2(1.345, 0.75), Vector2(0.9, 1.3), Vector2(1, 1)]
 }
-
-[sub_resource type="Animation" id="Animation_nbopf"]
-resource_name = "closed-hover"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DexSprites/Closed:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+tracks/3/type = "audio"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../DexClose")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"clips": [{
+"end_offset": 0.0897744,
+"start_offset": 0.0,
+"stream": ExtResource("6_nbopf")
+}],
+"times": PackedFloat32Array(0.0252886)
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("DexSprites/Open:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("DexSprites:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+tracks/3/use_blend = true
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SearchButton:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.0448634, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(1.2, 1.2)]
+"values": [Vector2(1.42, 0.775), Vector2(0.91, 1.33), Vector2(1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SearchButton:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.043814, 0.0990667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(-15.205, 18.985), Vector2(6.306, -23.413), Vector2(3, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_1nn0o"]
@@ -164,6 +194,45 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1.345, 0.75), Vector2(0.9, 1.3), Vector2(1, 1)]
+}
+tracks/3/type = "audio"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../DexOpen")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("6_nbopf")
+}],
+"times": PackedFloat32Array(0.0252886)
+}
+tracks/3/use_blend = true
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SearchButton:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.0448634, 0.100311),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1.42, 0.775), Vector2(0.91, 1.33), Vector2(1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SearchButton:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.043814, 0.0990667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(-15.205, 18.985), Vector2(6.306, -23.413), Vector2(3, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_jraj3"]
@@ -210,21 +279,196 @@ tracks/2/keys = {
 _data = {
 &"RESET": SubResource("Animation_o8jjn"),
 &"closed": SubResource("Animation_j5v65"),
-&"closed-hover": SubResource("Animation_nbopf"),
 &"open": SubResource("Animation_1nn0o"),
 &"opened": SubResource("Animation_jraj3")
 }
 
-[node name="Pokedex" type="Control" node_paths=PackedStringArray("dex_anim", "poke_image", "closed_sprite", "open_sprite", "entry_text_label")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j5v65"]
+bg_color = Color(1, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jraj3"]
+
+[sub_resource type="Animation" id="Animation_cx8b1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(0.0412346),
+"update": 0,
+"values": [Vector2(0, 5.06)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/TextEdit:editable")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel/Button:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_kavgq"]
+resource_name = "popdown"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.0473661, 1),
+"update": 0,
+"values": [Vector2(0, -38), Vector2(0, 5.06)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/TextEdit:editable")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel/Button:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_aqxlu"]
+resource_name = "popup"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.0412346, 1),
+"update": 0,
+"values": [Vector2(0, 5.06), Vector2(0, -38)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/TextEdit:editable")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0333333),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Panel/Button:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nregg"]
+_data = {
+&"RESET": SubResource("Animation_cx8b1"),
+&"popdown": SubResource("Animation_kavgq"),
+&"popup": SubResource("Animation_aqxlu")
+}
+
+[node name="Pokedex" type="Control" node_paths=PackedStringArray("search_bar", "search_button", "draggable_area", "dex", "dex_anim", "search_bar_anim", "poke_image", "search_toggle", "closed_sprite", "open_sprite", "entry_text_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_c5by8")
+search_bar = NodePath("DemoDex/SearchBar/Panel/TextEdit")
+search_button = NodePath("DemoDex/SearchBar/Panel/Button")
+draggable_area = NodePath("DemoDex/DexSprites/DraggableArea")
+dex = NodePath("DemoDex")
 dex_anim = NodePath("DemoDex/AnimationPlayer")
+search_bar_anim = NodePath("DemoDex/SearchBar/AnimationPlayer")
 poke_image = NodePath("DemoDex/DexSprites/Open/PokeImage")
+search_toggle = NodePath("DemoDex/SearchButton")
 closed_sprite = NodePath("DemoDex/DexSprites/Closed")
 open_sprite = NodePath("DemoDex/DexSprites/Open")
 entry_text_label = NodePath("DemoDex/DexSprites/Open/EntryMarquee/Entry")
@@ -232,10 +476,8 @@ entry_text_label = NodePath("DemoDex/DexSprites/Open/EntryMarquee/Entry")
 [node name="Panel" type="Panel" parent="."]
 visible = false
 layout_mode = 1
-offset_left = 128.0
-offset_top = 35.0
-offset_right = 520.0
-offset_bottom = 345.0
+offset_right = 392.0
+offset_bottom = 310.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_47d2q")
 
 [node name="PokeImage" type="TextureRect" parent="Panel"]
@@ -260,10 +502,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 170.0
-offset_top = 62.0
-offset_right = -741.0
-offset_bottom = -546.0
+offset_left = 48.0
+offset_top = 20.0
+offset_right = -863.0
+offset_bottom = -588.0
 grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "Enter the name of Pokemon"
@@ -276,19 +518,19 @@ middle_mouse_paste_enabled = false
 [node name="Button" type="Button" parent="."]
 visible = false
 layout_mode = 1
-offset_left = 416.0
-offset_top = 68.0
-offset_right = 485.0
-offset_bottom = 99.0
+offset_left = 294.0
+offset_top = 26.0
+offset_right = 363.0
+offset_bottom = 57.0
 text = "SEARCH"
 
 [node name="Output" type="Label" parent="."]
 visible = false
 layout_mode = 1
-offset_left = 142.0
-offset_top = 140.0
-offset_right = 509.0
-offset_bottom = 176.0
+offset_left = 20.0
+offset_top = 98.0
+offset_right = 387.0
+offset_bottom = 134.0
 theme_override_font_sizes/font_size = 26
 text = "Pokemon Name goes here lol"
 
@@ -303,15 +545,17 @@ text = "Pokemon Name goes here lol"
 [node name="APIEntry" type="HTTPRequest" parent="PokeAPI"]
 
 [node name="DemoDex" type="Node2D" parent="."]
-position = Vector2(766, 289)
+position = Vector2(600, 96)
 
 [node name="DexSprites" type="Node2D" parent="DemoDex"]
-position = Vector2(49, 81)
+position = Vector2(50, 81)
 
 [node name="Closed" type="Sprite2D" parent="DemoDex/DexSprites"]
 position = Vector2(-49, -81)
 texture = ExtResource("2_47d2q")
 centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 160, 214)
 
 [node name="Open" type="Sprite2D" parent="DemoDex/DexSprites"]
 visible = false
@@ -337,22 +581,119 @@ offset_right = 283.0
 offset_bottom = 87.0
 
 [node name="Entry" type="Label" parent="DemoDex/DexSprites/Open/EntryMarquee"]
-modulate = Color(1, 1, 1, 0)
+modulate = Color(1, 0.921569, 0, 0)
 clip_contents = true
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
+offset_left = 5.0
 offset_top = -11.5
-offset_right = 751.0
+offset_right = 756.0
 offset_bottom = 11.5
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_nbopf")
+
+[node name="CloseButton" type="Button" parent="DemoDex/DexSprites/Open"]
+offset_left = 239.0
+offset_top = 178.0
+offset_right = 289.0
+offset_bottom = 209.0
+scale = Vector2(1.08, 0.612903)
+text = "Close"
+
+[node name="DraggableArea" type="Sprite2D" parent="DemoDex/DexSprites"]
+z_index = -5
+position = Vector2(-11, -81)
+texture = ExtResource("4_o8jjn")
+centered = false
+region_enabled = true
+region_rect = Rect2(38, 0, 116.805, 42.8632)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DemoDex"]
 libraries = {
 &"": SubResource("AnimationLibrary_jraj3")
 }
 
+[node name="SearchBar" type="Control" parent="DemoDex"]
+visible = false
+z_index = -10
+layout_mode = 3
+anchors_preset = 0
+offset_left = 2.0
+offset_right = 42.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="Panel" type="Panel" parent="DemoDex/SearchBar"]
+layout_mode = 0
+offset_top = 5.06
+offset_right = 153.0
+offset_bottom = 33.06
+theme_override_styles/panel = SubResource("StyleBoxFlat_j5v65")
+
+[node name="TextEdit" type="LineEdit" parent="DemoDex/SearchBar/Panel"]
+layout_mode = 1
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 123.0
+offset_bottom = 26.0
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 11
+placeholder_text = "Enter name/ID"
+editable = false
+context_menu_enabled = false
+emoji_menu_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
+drag_and_drop_selection_enabled = false
+
+[node name="Button" type="Button" parent="DemoDex/SearchBar/Panel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 124.0
+offset_top = -14.0
+offset_right = 152.0
+offset_bottom = 14.0
+grow_vertical = 2
+theme_override_constants/icon_max_width = 20
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jraj3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_jraj3")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_jraj3")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_jraj3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jraj3")
+disabled = true
+icon = ExtResource("6_jraj3")
+flat = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DemoDex/SearchBar"]
+libraries = {
+&"": SubResource("AnimationLibrary_nregg")
+}
+
+[node name="SearchButton" type="TextureButton" parent="DemoDex"]
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 44.0
+offset_bottom = 44.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("8_kavgq")
+texture_pressed = ExtResource("10_yehji")
+texture_hover = ExtResource("9_nregg")
+ignore_texture_size = true
+stretch_mode = 5
+
 [node name="PokeCry" type="AudioStreamPlayer" parent="."]
 
+[node name="DexOpen" type="AudioStreamPlayer" parent="."]
+
+[node name="DexClose" type="AudioStreamPlayer" parent="."]
+
 [connection signal="pressed" from="Panel/Button" to="." method="_on_cry_button_pressed"]
+[connection signal="pressed" from="DemoDex/DexSprites/Open/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="button_down" from="DemoDex/SearchButton" to="." method="search_bar_toggle"]
+[connection signal="mouse_entered" from="DemoDex/SearchButton" to="." method="_on_search_button_mouse_entered"]
+[connection signal="mouse_exited" from="DemoDex/SearchButton" to="." method="_on_search_button_mouse_exited"]
