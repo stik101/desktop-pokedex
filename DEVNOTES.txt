@@ -1,0 +1,13 @@
+[]ID 
+[]Name
+[]TYPE
+[]HEIGHT
+[]WEIGHT
+[]BASE STATS [HP, Attack, Defense, Special Attack, Special Defense, and Speed]
+[]MOVES
+[]ABILITIES
+[]IMAGES images
+DESCRIPTION
+CRIES audio file
+
+THEMES: Kanto, johto, mini, programmer art, rotem, Trading card edition

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://dfhmhu0xoaxb1"]
+
+[ext_resource type="Script" uid="uid://gub0pmms11ne" path="res://hello.gd" id="1_ig7tw"]
+[ext_resource type="Texture2D" uid="uid://bk0aedpgxrl6q" path="res://icon.svg" id="2_0xm2m"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_ig7tw")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(577, 347)
+texture = ExtResource("2_0xm2m")
+
+[node name="Button" type="Button" parent="Sprite2D"]
+offset_left = -22.0
+offset_top = -13.0
+offset_right = 31.0
+offset_bottom = 18.0
+text = "Hello!"
+
+[connection signal="pressed" from="Sprite2D/Button" to="." method="_on_button_pressed"]
