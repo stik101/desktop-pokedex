@@ -7,7 +7,17 @@
 []MOVES
 []ABILITIES
 []IMAGES images
-DESCRIPTION
-CRIES audio file
+[]DESCRIPTION
+[]CRIES audio file
 
 THEMES: Kanto, johto, mini, programmer art, rotem, Trading card edition
+
+TODOS:
+	Make the search bar more taller for search for snippet
+	make the search bar dissapear when dragging
+	add enum states for pokedex stat modes [normal, base stats, abilities, moves]
+	make the marquee scroll + show name and id
+		make marquee reset
+	when loading pokemon's data, close the pokedex and then flip open again.
+	Setting feature
+	Set passthrough hitbox

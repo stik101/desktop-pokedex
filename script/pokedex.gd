@@ -1,15 +1,5 @@
 extends Control
 
-'''
-ID 
-Name
-IMAGES
-TYPE
-BASE STATS [HP, Attack, Defense, Special Attack, Special Defense, and Speed]
-MOVES
-ATTACKS
-DESCRIPTION
-'''
 
 # ALL HTTPREQUEST NODES GO HERE
 @onready var api:HTTPRequest = $PokeAPI/APIName
@@ -35,6 +25,8 @@ var mouse_offset = Vector2.ZERO
 var is_open:bool = false
 @export var closed_sprite:Sprite2D
 @export var open_sprite:Sprite2D
+@export var icon_1:TextureRect
+@export var icon_2:TextureRect
 var current_sprite:Sprite2D
 var is_hovering:bool = false
 var is_waiting:bool = true
@@ -47,7 +39,20 @@ var is_mouse_on_search_toggle:bool = false
 var cry_audio:AudioStreamOggVorbis = AudioStreamOggVorbis.new()
 
 # NOTE: POKE ID IS REQUIRED FOR A LOTA STUFF, SO ITS DECLARED EARLIER HERE
+var p_name:String
 var p_id:int
+var p_height:float
+var p_weight:float
+var p_type:Array[String]
+var p_moves:Array[String]
+var p_abilities:Array[String]
+var p_hp:int
+var p_speed:int
+var p_attack:int
+var p_defence:int
+var p_sattack:int
+var p_sdefence:int
+var p_entry:String
 
 # API LINKS GO HERE
 var api_link:String = "https://pokeapi.co/api/v2/pokemon/"
@@ -55,6 +60,7 @@ var image_link:String = 'https://raw.githubusercontent.com/PokeAPI/sprites/maste
 var cry_link:String = 'https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/'
 var cry_link_legacy:String = 'https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/legacy/'
 var entry_link:String = "https://pokeapi.co/api/v2/pokemon-species/"
+var type_url:String = "res://type_icons/"
 
 # Connect a lota signals (mostly of APIs)
 func _ready() -> void:
@@ -89,39 +95,39 @@ func _on_request_pokedata(result:int, response_code:int, headers:PackedStringArr
 	
 	# COLLECTING ALL DATAS OF POKEMON HERE ON
 	#Name
-	var p_name:String = data["name"]
+	p_name = data["name"]
 	
 	#ID
 	p_id = data["id"]
 	
 	# HEIGHT
-	var p_height:float = data["height"]
+	p_height = data["height"]
 	
 	# WEIGHT
-	var p_weight:float = data['weight']
+	p_weight = data['weight']
 	
 	# TYPES
-	var p_type:Array[String] = []
+	p_type = []
 	for t in data['types']:
 		p_type.append(t['type']['name'])
 	
 	# MOVES
-	var p_moves:Array[String] = []
+	p_moves = []
 	for m in data["moves"]:
 		p_moves.append(m["move"]["name"])
 	
 	# ABILITIES
-	var p_abilities:Array[String] = []
+	p_abilities = []
 	for a in data["abilities"]:
 		p_abilities.append(a["ability"]["name"])
 	
 	# BASE STATS!!!
-	var p_hp:float = data["stats"][0]['base_stat'] # HP
-	var p_attack:float = data["stats"][1]['base_stat'] # ATTACK
-	var p_defence:float = data["stats"][2]['base_stat'] # DEFENCE
-	var p_sattack:float = data["stats"][3]['base_stat'] # SPECIAL ATTACK
-	var p_sdefence:float = data["stats"][4]['base_stat'] # SPECIAL DEFENCE
-	var p_speed:float = data["stats"][5]['base_stat'] # SPEED
+	p_hp = data["stats"][0]['base_stat'] # HP
+	p_attack = data["stats"][1]['base_stat'] # ATTACK
+	p_defence = data["stats"][2]['base_stat'] # DEFENCE
+	p_sattack = data["stats"][3]['base_stat'] # SPECIAL ATTACK
+	p_sdefence = data["stats"][4]['base_stat'] # SPECIAL DEFENCE
+	p_speed = data["stats"][5]['base_stat'] # SPEED
 	
 	output.text = str(int(data["id"])) + ". " + str(data["name"]).to_upper()
 	print(int(data["id"]),'. ', data["name"])
@@ -137,9 +143,24 @@ func _on_request_pokedata(result:int, response_code:int, headers:PackedStringArr
 	print("S. DEF: ", p_sdefence)
 	print("SPD: ", p_speed)
 	
+	set_type()
 	search_image() # since now weve id, we can search the pokemon image
 	search_cry()
 	search_entry()
+
+func set_type():
+	if len(p_type) == 1:
+		icon_1.texture = load(type_url+ p_type[0] + '.svg')
+		icon_2.texture = null
+		icon_1.tooltip_text = p_type[0].capitalize()
+	elif len(p_type) == 2:
+		icon_1.texture = load(type_url+ p_type[0] + '.svg')
+		icon_2.texture = load(type_url+ p_type[1] + '.svg')
+		icon_1.tooltip_text = p_type[0].capitalize()
+		icon_2.tooltip_text = p_type[1].capitalize()
+	else:
+		icon_1.texture = null
+		icon_2.texture = null
 
 func search_image() -> void:
 	var error = api_image.request(image_link + str(p_id) + '.png')
@@ -173,7 +194,6 @@ func _on_request_pokecry(result:int, response_code:int, headers:PackedStringArra
 		print("Failed to download cry for ID: ", p_id)
 		return
 	
-	
 	cry_audio = AudioStreamOggVorbis.load_from_buffer(body)
 	poke_cry.stream = cry_audio
 
@@ -188,7 +208,7 @@ func _on_request_pokeentry(result:int, response_code:int, headers:PackedStringAr
 	
 	var data:Dictionary = json.data
 	
-	var p_entry:String = ""
+	p_entry = ""
 	
 	for e in data["flavor_text_entries"]:
 		if p_entry == '':
@@ -198,8 +218,7 @@ func _on_request_pokeentry(result:int, response_code:int, headers:PackedStringAr
 	
 	p_entry = p_entry.replace("\n", " ").replace("\f", " ")
 	entry_text_label.text = p_entry
-	
-	print("\n", JSON.stringify(p_entry))
+
 func _process(delta: float) -> void:
 	if is_dragging:
 		dex.global_position = get_global_mouse_position() + mouse_offset
@@ -211,12 +230,18 @@ func _process(delta: float) -> void:
 			dex_sprites.modulate = Color("ffffff")
 	else:
 		if entry_text_label.text != '':
-			# HANDLES THE MARQUEE EFFECT IN ENTRLY LABEL
+			
+			# HANDLES THE MARQUEE EFFECT IN ENTRLY LABEL + NAME AND ID
 			var x_limit = entry_text_label.size.x
 			var scroll_speed = 1
 			# Start of effect
 			if is_waiting:
-				await get_tree().create_timer(1).timeout 
+				entry_text_label.text = str(p_id) + '. ' + str(p_name)
+				await get_tree().create_tween().tween_property(entry_text_label, "modulate:a", 1.0, 0.5).finished
+				await get_tree().create_timer(1).timeout
+				await get_tree().create_tween().tween_property(entry_text_label, "modulate:a", 0.0, 0.5).finished
+				await get_tree().create_timer(1).timeout
+				entry_text_label.text = p_entry
 				await get_tree().create_tween().tween_property(entry_text_label, "modulate:a", 1.0, 0.5).finished
 				await get_tree().create_timer(1).timeout
 				is_waiting = false
@@ -227,7 +252,7 @@ func _process(delta: float) -> void:
 					is_waiting = true
 					entry_text_label.position.x = 5
 					entry_text_label.modulate.a = 0.0
-		
+
 # To flip open the pokedex
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -237,14 +262,14 @@ func _input(event: InputEvent) -> void:
 				return
 		if event.pressed:
 			if draggable_area.get_rect().has_point(draggable_area.to_local(event.position)):
-				search_bar_anim.play("popdown")
-				is_search_bar_open = true
+				Input.set_default_cursor_shape(Input.CURSOR_DRAG)
 				mouse_offset = dex.global_position - get_global_mouse_position()
 				is_dragging = true
 				return
 		else:
 			if is_dragging:
 				is_dragging = false
+				Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 				return
 			if current_sprite.get_rect().has_point(current_sprite.to_local(event.position)):
 				get_viewport().set_input_as_handled()
@@ -255,19 +280,13 @@ func _input(event: InputEvent) -> void:
 						dex_anim.play("open")
 						is_open = true
 
-
-
 func _on_cry_button_pressed() -> void:
 	poke_cry.play()
-
 
 func _on_close_button_pressed() -> void:
 	current_sprite = open_sprite
 	dex_anim.play("closed")
 	is_open = false
-
-
-
 
 func search_bar_toggle() -> void:
 	is_search_bar_open = !is_search_bar_open
@@ -276,10 +295,8 @@ func search_bar_toggle() -> void:
 	else:
 		search_bar_anim.play("popup")
 
-
 func _on_search_button_mouse_entered() -> void:
 	is_mouse_on_search_toggle = true
-
 
 func _on_search_button_mouse_exited() -> void:
 	is_mouse_on_search_toggle = false
