@@ -28,10 +28,10 @@ _Inspired by those mini widgets we had in Windows 7, but for Poké-Geeks lol._
 - ⭐ Abilities
 - 🌐 Pokémon data fetched from the PokéAPI
 - 🎞️ Animated opening/closing Pokédex
+- 🧬 Types
 
 **WIP ⚠️**
 - 🖼️ Pokémon seach by Snippet [REQUIRES YOUR OWN GENAI API KEYS]
-- 🧬 Types
 - 🎨 Themes inspired by different generations
 ---
 
