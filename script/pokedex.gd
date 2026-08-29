@@ -27,6 +27,8 @@ var is_open:bool = false
 @export var open_sprite:Sprite2D
 @export var icon_1:TextureRect
 @export var icon_2:TextureRect
+@export var nav_right:TextureButton
+@export var nav_left:TextureButton
 var current_sprite:Sprite2D
 var is_hovering:bool = false
 var is_waiting:bool = true
@@ -54,6 +56,14 @@ var p_sattack:int
 var p_sdefence:int
 var p_entry:String
 
+# FOR THE ENTRY TEXT SPLITTING
+
+const CHAR_LIMIT:int = 88
+
+var entry_pages:Array[String] = []
+var current_page:int = 0
+
+
 # API LINKS GO HERE
 var api_link:String = "https://pokeapi.co/api/v2/pokemon/"
 var image_link:String = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'
@@ -64,7 +74,6 @@ var type_url:String = "res://type_icons/"
 
 # Connect a lota signals (mostly of APIs)
 func _ready() -> void:
-	entry_text_label.modulate = Color("ffeb0000")
 	current_sprite = closed_sprite
 	api.request_completed.connect(_on_request_pokedata)
 	search_button.pressed.connect(search)
@@ -216,8 +225,29 @@ func _on_request_pokeentry(result:int, response_code:int, headers:PackedStringAr
 				if e["language"]["name"] == 'en':
 					p_entry = e["flavor_text"]
 	
+
 	p_entry = p_entry.replace("\n", " ").replace("\f", " ")
-	entry_text_label.text = p_entry
+	
+	entry_pages.clear()
+	
+	while p_entry.length() > CHAR_LIMIT:
+		var split_at:int = p_entry.rfind(" ", CHAR_LIMIT)
+		
+		# Safety fallback if there somehow isn't a space
+		if split_at == -1:
+			split_at = CHAR_LIMIT
+		
+		entry_pages.append(p_entry.substr(0, split_at))
+		p_entry = p_entry.substr(split_at + 1)
+		
+	if p_entry.length() > 0:
+		entry_pages.append(p_entry)
+	
+	if entry_pages.size() > 0:
+		entry_text_label.text = entry_pages[0]
+		
+	entry_text_label.text = entry_pages[current_page]
+
 
 func _process(delta: float) -> void:
 	if is_dragging:
@@ -228,30 +258,6 @@ func _process(delta: float) -> void:
 			dex_sprites.modulate = Color("e4e4e4")
 		else:
 			dex_sprites.modulate = Color("ffffff")
-	else:
-		if entry_text_label.text != '':
-			
-			# HANDLES THE MARQUEE EFFECT IN ENTRLY LABEL + NAME AND ID
-			var x_limit = entry_text_label.size.x
-			var scroll_speed = 1
-			# Start of effect
-			if is_waiting:
-				entry_text_label.text = str(p_id) + '. ' + str(p_name)
-				await get_tree().create_tween().tween_property(entry_text_label, "modulate:a", 1.0, 0.5).finished
-				await get_tree().create_timer(1).timeout
-				await get_tree().create_tween().tween_property(entry_text_label, "modulate:a", 0.0, 0.5).finished
-				await get_tree().create_timer(1).timeout
-				entry_text_label.text = p_entry
-				await get_tree().create_tween().tween_property(entry_text_label, "modulate:a", 1.0, 0.5).finished
-				await get_tree().create_timer(1).timeout
-				is_waiting = false
-			else:
-				if entry_text_label.position.x >= -x_limit:
-					entry_text_label.position.x -= scroll_speed
-				else:
-					is_waiting = true
-					entry_text_label.position.x = 5
-					entry_text_label.modulate.a = 0.0
 
 # To flip open the pokedex
 func _input(event: InputEvent) -> void:
@@ -300,3 +306,15 @@ func _on_search_button_mouse_entered() -> void:
 
 func _on_search_button_mouse_exited() -> void:
 	is_mouse_on_search_toggle = false
+
+# THESE ARE FOR NAVIGATION BUTTONS FOR TEXT ENTRIES
+
+func _on_right_button_pressed() -> void:
+	if current_page + 1 < entry_pages.size():
+		current_page += 1
+		entry_text_label.text = entry_pages[current_page]
+
+func _on_left_button_pressed() -> void:
+	if current_page > 0:
+		current_page -= 1
+		entry_text_label.text = entry_pages[current_page]
