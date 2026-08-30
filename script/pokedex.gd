@@ -33,6 +33,11 @@ var is_open:bool = false
 @export var nav_right:TextureButton
 @export var nav_left:TextureButton
 @export var genera_label:Label
+@export var flip_button:TextureButton
+@export_category("State of Dex Data Nodes")
+@export var dex_option:OptionButton
+@export var info_node:Node2D
+@export var stat_node:Node2D
 var current_sprite:Sprite2D
 var is_hovering:bool = false
 var is_waiting:bool = true
@@ -40,6 +45,21 @@ var is_dragging:bool = false
 var is_search_bar_open:bool = true
 var is_mouse_on_search_toggle:bool = false
 @export var entry_text_label:Label
+@export_category("Stat Node Labels")
+@export var hp: Label
+@export var atk: Label
+@export var def: Label
+@export var satk: Label
+@export var sdef: Label
+@export var speed: Label
+
+
+# TO CHECK IF ALL DATA IS LOADED:
+var got_data:bool = true
+var got_sprite_front:bool = true
+var got_sprite_back:bool = true
+var got_cry:bool = true
+var got_entry:bool = true
 
 # Pokemon Cry SFX
 var cry_audio:AudioStreamOggVorbis = AudioStreamOggVorbis.new()
@@ -80,6 +100,7 @@ var type_url:String = "res://type_icons/"
 
 # Connect a lota signals (mostly of APIs)
 func _ready() -> void:
+	stat_node.hide()
 	current_sprite = closed_sprite
 	api.request_completed.connect(_on_request_pokedata)
 	search_button.pressed.connect(search)
@@ -96,6 +117,12 @@ func search() -> void:
 	
 	if error != OK:
 		print("Oops, there's an error when data was recieved!", str(error))
+	else:
+		got_data = false
+		got_sprite_front= false
+		got_sprite_back = false
+		got_cry = false
+		got_entry = false
 	
 # NOTE: ALL OTHER API FUNCTION CALLS ARE DONE AT THE END OF THS FUNC TOO
 func _on_request_pokedata(result:int, response_code:int, headers:PackedStringArray, body:PackedByteArray):
@@ -145,6 +172,17 @@ func _on_request_pokedata(result:int, response_code:int, headers:PackedStringArr
 	p_sdefence = data["stats"][4]['base_stat'] # SPECIAL DEFENCE
 	p_speed = data["stats"][5]['base_stat'] # SPEED
 	
+	hp.text = "HP: " + str(p_hp)
+	atk.text = "ATK: " + str(p_attack)
+	def.text = "DEF: " + str(p_defence)
+	satk.text = "SP ATK: " + str(p_sattack)
+	sdef.text = "SP DEF: " + str(p_sattack)
+	speed.text = "SPEED: " + str(p_speed)
+	
+	got_data = true
+	
+	# FOR DEBUGGIN PURPOSE
+	# TODO: REMOVE AFTER IMPLEMENTING
 	print(int(data["id"]),'. ', data["name"])
 	print("Height: ", str(p_height), " Weight: ", str(p_weight))
 	print("Type: ", p_type)
@@ -158,8 +196,7 @@ func _on_request_pokedata(result:int, response_code:int, headers:PackedStringArr
 	print("S. DEF: ", p_sdefence)
 	print("SPD: ", p_speed)
 	
-	name_id_label.text = str(p_id) + '. ' + str(p_name
-	)
+	name_id_label.text = str(p_id) + '. ' + str(p_name)
 	set_type()
 	search_image() # since now weve id, we can search the pokemon image
 	search_cry()
@@ -206,6 +243,7 @@ func _on_request_pokeimage_front(result:int, response_code:int, headers:PackedSt
 	if error == OK:
 		image_front = ImageTexture.create_from_image(image)
 		poke_image.texture = image_front
+		got_sprite_front = true
 		print("Pokemon image loaded successfully! ")
 
 func _on_request_pokeimage_back(result:int, response_code:int, headers:PackedStringArray, body:PackedByteArray):
@@ -217,6 +255,7 @@ func _on_request_pokeimage_back(result:int, response_code:int, headers:PackedStr
 	var error = image.load_png_from_buffer(body)
 	if error == OK:
 		image_back = ImageTexture.create_from_image(image)
+		got_sprite_back = true
 		print("Pokemon's back sprite is succesfully loaded")
 
 
@@ -227,6 +266,7 @@ func _on_request_pokecry(result:int, response_code:int, headers:PackedStringArra
 	
 	cry_audio = AudioStreamOggVorbis.load_from_buffer(body)
 	poke_cry.stream = cry_audio
+	got_cry = true
 
 func _on_request_pokeentry(result:int, response_code:int, headers:PackedStringArray, body:PackedByteArray):
 	print("\nDESCRIPTION RECIEVED SUCCESFULLY")
@@ -277,9 +317,15 @@ func _on_request_pokeentry(result:int, response_code:int, headers:PackedStringAr
 		entry_text_label.text = entry_pages[0]
 		
 	entry_text_label.text = entry_pages[current_page]
-
+	got_entry = true
 
 func _process(delta: float) -> void:
+	#Check if recieved all data of earlier pokemon, then only we can search next one
+	if got_cry and got_data and got_entry and got_sprite_back and got_sprite_front:
+		flip_button.disabled = false
+	else:
+		flip_button.disabled = true
+	
 	if is_dragging:
 		dex.global_position = get_global_mouse_position() + mouse_offset
 	# HANDLES THE HOVER POKEDEX FEATURE
@@ -355,3 +401,12 @@ func _on_flip_pressed() -> void:
 		poke_image.texture = image_back
 	else:
 		poke_image.texture = image_front
+
+
+func _on_option_button_item_selected(index: int) -> void:
+	info_node.hide()
+	stat_node.hide()
+	if index == 0:
+		info_node.show()
+	if index == 1:
+		stat_node.show()
