@@ -44,6 +44,7 @@ var is_waiting:bool = true
 var is_dragging:bool = false
 var is_search_bar_open:bool = true
 var is_mouse_on_search_toggle:bool = false
+var is_settings_toggled:bool = false
 @export var entry_text_label:Label
 @export_category("Stat Node Labels")
 @export var hp: Label
@@ -53,6 +54,10 @@ var is_mouse_on_search_toggle:bool = false
 @export var sdef: Label
 @export var speed: Label
 
+@export_category("Misc")
+# The tooltip app is handled by StatusIndicator Node
+@export var status_indicator:StatusIndicator
+@export var settings_node:Control
 
 # TO CHECK IF ALL DATA IS LOADED:
 var got_data:bool = true
@@ -102,12 +107,24 @@ var type_url:String = "res://type_icons/"
 func _ready() -> void:
 	stat_node.hide()
 	current_sprite = closed_sprite
+	dex.show()
+	settings_node.hide()
+	
+	#Everything status indicator go here
+	status_indicator.pressed.connect(toggle_dex)
+	
 	api.request_completed.connect(_on_request_pokedata)
 	search_button.pressed.connect(search)
 	api_image_front.request_completed.connect(_on_request_pokeimage_front)
 	api_image_back.request_completed.connect(_on_request_pokeimage_back)
 	api_cry.request_completed.connect(_on_request_pokecry)
 	api_entry.request_completed.connect(_on_request_pokeentry)
+
+func toggle_dex(mouse_button: int, mouse_position: Vector2i) -> void:
+	if dex.visible:
+		dex.hide()
+	else:
+		dex.show()
 
 # For search bar field
 func search() -> void:
@@ -123,7 +140,7 @@ func search() -> void:
 		got_sprite_back = false
 		got_cry = false
 		got_entry = false
-	
+
 # NOTE: ALL OTHER API FUNCTION CALLS ARE DONE AT THE END OF THS FUNC TOO
 func _on_request_pokedata(result:int, response_code:int, headers:PackedStringArray, body:PackedByteArray):
 	print("Request done! Status: ", response_code)
@@ -410,3 +427,19 @@ func _on_option_button_item_selected(index: int) -> void:
 		info_node.show()
 	if index == 1:
 		stat_node.show()
+
+func toggle_settings() -> void:
+	if settings_node.visible:
+		settings_node.hide()
+		dex.show()
+	else:
+		settings_node.show()
+		dex.hide()
+
+
+func _on_tray_icon_menu_pressed(id: int) -> void:
+	
+	if id == 0:
+		toggle_settings()
+	if id == 2:
+		get_tree().quit()

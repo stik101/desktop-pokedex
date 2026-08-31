@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://b6qqwi7forvta"]
+[gd_scene load_steps=37 format=3 uid="uid://b6qqwi7forvta"]
 
 [ext_resource type="Script" uid="uid://bl5vlwt6f4ao3" path="res://script/pokedex.gd" id="1_c5by8"]
 [ext_resource type="Texture2D" uid="uid://cbg2v5ttd7nky" path="res://pokedex base sprite.png" id="2_47d2q"]
@@ -22,6 +22,23 @@
 [ext_resource type="Texture2D" uid="uid://dgbtf0anxtyrw" path="res://ASSETS/flip button/flip normal.png" id="14_ovi7i"]
 [ext_resource type="Texture2D" uid="uid://c6ugb6cqygsxf" path="res://ASSETS/flip button/flip pressed.png" id="15_152mf"]
 [ext_resource type="Texture2D" uid="uid://j1dm8djm4u18" path="res://ASSETS/flip button/flip hover.png" id="16_hprl5"]
+[ext_resource type="Texture2D" uid="uid://1763qf2ag8or" path="res://icon.png" id="23_152mf"]
+[ext_resource type="FontFile" uid="uid://yynbep0qqycx" path="res://ASSETS/Reversal Bd.otf" id="23_hprl5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_152mf"]
+bg_color = Color(0.756863, 0, 0, 1)
+border_width_left = 15
+border_width_top = 15
+border_width_right = 15
+border_width_bottom = 15
+border_color = Color(0.501961, 0, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.188235)
+shadow_size = 10
+shadow_offset = Vector2(10, 10)
 
 [sub_resource type="Animation" id="Animation_o8jjn"]
 length = 0.001
@@ -497,7 +514,7 @@ _data = {
 &"popup": SubResource("Animation_aqxlu")
 }
 
-[node name="Pokedex" type="Control" node_paths=PackedStringArray("search_bar", "search_button", "draggable_area", "dex", "dex_anim", "search_bar_anim", "name_id_label", "poke_image", "search_toggle", "closed_sprite", "open_sprite", "icon_1", "icon_2", "nav_right", "nav_left", "genera_label", "flip_button", "dex_option", "info_node", "stat_node", "entry_text_label", "hp", "atk", "def", "satk", "sdef", "speed")]
+[node name="Pokedex" type="Control" node_paths=PackedStringArray("search_bar", "search_button", "draggable_area", "dex", "dex_anim", "search_bar_anim", "name_id_label", "poke_image", "search_toggle", "closed_sprite", "open_sprite", "icon_1", "icon_2", "nav_right", "nav_left", "genera_label", "flip_button", "dex_option", "info_node", "stat_node", "entry_text_label", "hp", "atk", "def", "satk", "sdef", "speed", "status_indicator", "settings_node")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -533,6 +550,8 @@ def = NodePath("DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContai
 satk = NodePath("DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SATK")
 sdef = NodePath("DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SDEF")
 speed = NodePath("DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SPEED")
+status_indicator = NodePath("StatusIndicator")
+settings_node = NodePath("Settings")
 
 [node name="PokeAPI" type="Node" parent="."]
 
@@ -545,6 +564,89 @@ speed = NodePath("DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxCont
 [node name="APICry" type="HTTPRequest" parent="PokeAPI"]
 
 [node name="APIEntry" type="HTTPRequest" parent="PokeAPI"]
+
+[node name="Settings" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Settings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 340
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 340
+theme_override_constants/margin_bottom = 100
+
+[node name="BG" type="Panel" parent="Settings/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_152mf")
+
+[node name="MarginContainer" type="MarginContainer" parent="Settings/MarginContainer/BG"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_constants/margin_top = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Settings/MarginContainer/BG/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 25
+theme_override_fonts/font = ExtResource("23_hprl5")
+theme_override_font_sizes/font_size = 51
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="Placeholder1" type="MarginContainer" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+
+[node name="Button" type="CheckBox" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer/Placeholder1"]
+layout_mode = 2
+theme_override_constants/outline_size = 15
+theme_override_constants/h_separation = 10
+theme_override_fonts/font = ExtResource("23_hprl5")
+text = "Lol funny settings go here"
+
+[node name="Placeholder2" type="MarginContainer" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+
+[node name="Button" type="CheckBox" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer/Placeholder2"]
+layout_mode = 2
+theme_override_constants/outline_size = 15
+theme_override_constants/h_separation = 10
+theme_override_fonts/font = ExtResource("23_hprl5")
+text = "Another funny setting LMAO"
+
+[node name="MarginContainer2" type="MarginContainer" parent="Settings/MarginContainer/BG"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+scale = Vector2(0.625, 0.625)
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = -25
+
+[node name="TextureButton" type="TextureButton" parent="Settings/MarginContainer/BG/MarginContainer2"]
+layout_mode = 2
+tooltip_text = "Close Settings"
+texture_normal = ExtResource("5_47pyn")
+texture_pressed = ExtResource("5_47pyn")
+texture_hover = ExtResource("5_47pyn")
 
 [node name="DemoDex" type="Node2D" parent="."]
 position = Vector2(436, 241)
@@ -939,6 +1041,24 @@ polygon = PackedVector2Array(-9, 6, 21, 49, 25, 46, -7, 4)
 
 [node name="DexClose" type="AudioStreamPlayer" parent="."]
 
+[node name="StatusIndicator" type="StatusIndicator" parent="."]
+tooltip = "Desktop Pokedex"
+icon = ExtResource("23_152mf")
+menu = NodePath("../PopupMenu")
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+prefer_native_menu = true
+item_count = 3
+item_0/text = "Settings"
+item_0/id = 0
+item_1/text = "Help"
+item_1/id = 1
+item_2/text = "Quit"
+item_2/id = 2
+
+[node name="PassthroughHandler" type="Node2D" parent="."]
+
+[connection signal="pressed" from="Settings/MarginContainer/BG/MarginContainer2/TextureButton" to="." method="toggle_settings"]
 [connection signal="pressed" from="DemoDex/DexSprites/Open/NavRight" to="." method="_on_right_button_pressed"]
 [connection signal="pressed" from="DemoDex/DexSprites/Open/NavLeft" to="." method="_on_left_button_pressed"]
 [connection signal="pressed" from="DemoDex/DexSprites/Open/CloseButton" to="." method="_on_close_button_pressed"]
@@ -948,3 +1068,4 @@ polygon = PackedVector2Array(-9, 6, 21, 49, 25, 46, -7, 4)
 [connection signal="button_down" from="DemoDex/SearchButton" to="." method="search_bar_toggle"]
 [connection signal="mouse_entered" from="DemoDex/SearchButton" to="." method="_on_search_button_mouse_entered"]
 [connection signal="mouse_exited" from="DemoDex/SearchButton" to="." method="_on_search_button_mouse_exited"]
+[connection signal="id_pressed" from="PopupMenu" to="." method="_on_tray_icon_menu_pressed"]
