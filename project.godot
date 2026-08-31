@@ -11,12 +11,14 @@ config_version=5
 [application]
 
 config/name="Desktop Pokedex"
+config/description="A mini, floating pokedex for your desktop
+Made by @MrStiK101"
 run/main_scene="uid://dfhmhu0xoaxb1"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false
-config/icon="res://icon.svg"
+config/icon="uid://1763qf2ag8or"
 
 [autoload]
 

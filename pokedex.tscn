@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://b6qqwi7forvta"]
+[gd_scene load_steps=38 format=3 uid="uid://b6qqwi7forvta"]
 
 [ext_resource type="Script" uid="uid://bl5vlwt6f4ao3" path="res://script/pokedex.gd" id="1_c5by8"]
 [ext_resource type="Texture2D" uid="uid://cbg2v5ttd7nky" path="res://pokedex base sprite.png" id="2_47d2q"]
@@ -24,6 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://j1dm8djm4u18" path="res://ASSETS/flip button/flip hover.png" id="16_hprl5"]
 [ext_resource type="Texture2D" uid="uid://1763qf2ag8or" path="res://icon.png" id="23_152mf"]
 [ext_resource type="FontFile" uid="uid://yynbep0qqycx" path="res://ASSETS/Reversal Bd.otf" id="23_hprl5"]
+[ext_resource type="Script" uid="uid://dqyner3yx1vey" path="res://passthrough_handler.gd" id="25_ih5w3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_152mf"]
 bg_color = Color(0.756863, 0, 0, 1)
@@ -101,6 +102,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(3, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../PassthroughHandler:is_open")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_j5v65"]
@@ -181,6 +194,18 @@ tracks/5/keys = {
 "update": 0,
 "values": [Vector2(-15.205, 18.985), Vector2(6.306, -23.413), Vector2(3, 1)]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../PassthroughHandler:is_open")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_1nn0o"]
 resource_name = "open"
@@ -259,6 +284,18 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(-15.205, 18.985), Vector2(6.306, -23.413), Vector2(3, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../PassthroughHandler:is_open")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_jraj3"]
@@ -380,6 +417,18 @@ tracks/4/keys = {
 "update": 0,
 "values": [Vector2(-3, 2)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../../PassthroughHandler:is_search_bar_open")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_kavgq"]
 resource_name = "popdown"
@@ -442,6 +491,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(45, -20), Vector2(-28, 13)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../../PassthroughHandler:is_search_bar_open")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
 }
 
 [sub_resource type="Animation" id="Animation_aqxlu"]
@@ -506,6 +567,18 @@ tracks/4/keys = {
 "update": 0,
 "values": [Vector2(-28, 13), Vector2(45, -20)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../../PassthroughHandler:is_search_bar_open")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nregg"]
 _data = {
@@ -514,7 +587,7 @@ _data = {
 &"popup": SubResource("Animation_aqxlu")
 }
 
-[node name="Pokedex" type="Control" node_paths=PackedStringArray("search_bar", "search_button", "draggable_area", "dex", "dex_anim", "search_bar_anim", "name_id_label", "poke_image", "search_toggle", "closed_sprite", "open_sprite", "icon_1", "icon_2", "nav_right", "nav_left", "genera_label", "flip_button", "dex_option", "info_node", "stat_node", "entry_text_label", "hp", "atk", "def", "satk", "sdef", "speed", "status_indicator", "settings_node")]
+[node name="Pokedex" type="Control" node_paths=PackedStringArray("search_bar", "search_button", "poke_cry", "draggable_area", "dex", "dex_anim", "search_bar_anim", "dex_sprites", "name_id_label", "poke_image", "search_toggle", "closed_sprite", "open_sprite", "icon_1", "icon_2", "nav_right", "nav_left", "genera_label", "flip_button", "dex_option", "info_node", "stat_node", "entry_text_label", "hp", "atk", "def", "satk", "sdef", "speed", "status_indicator", "settings_node")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -523,33 +596,35 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_c5by8")
-search_bar = NodePath("DemoDex/SearchBar/Panel/TextEdit")
-search_button = NodePath("DemoDex/SearchBar/Panel/Button")
-draggable_area = NodePath("DemoDex/DexSprites/DraggableArea")
-dex = NodePath("DemoDex")
-dex_anim = NodePath("DemoDex/AnimationPlayer")
-search_bar_anim = NodePath("DemoDex/SearchBar/AnimationPlayer")
-name_id_label = NodePath("DemoDex/DexSprites/Open/PokeNameID/NameIDLabel")
-poke_image = NodePath("DemoDex/DexSprites/Open/Info/PokeImage")
-search_toggle = NodePath("DemoDex/SearchButton")
-closed_sprite = NodePath("DemoDex/DexSprites/Closed")
-open_sprite = NodePath("DemoDex/DexSprites/Open")
-icon_1 = NodePath("DemoDex/DexSprites/Open/Icon1")
-icon_2 = NodePath("DemoDex/DexSprites/Open/Icon2")
-nav_right = NodePath("DemoDex/DexSprites/Open/NavRight")
-nav_left = NodePath("DemoDex/DexSprites/Open/NavLeft")
-genera_label = NodePath("DemoDex/DexSprites/Open/Info/GeneraLabel")
-flip_button = NodePath("DemoDex/DexSprites/Open/FlipButton")
-dex_option = NodePath("DemoDex/DexSprites/Open/OptionButton")
-info_node = NodePath("DemoDex/DexSprites/Open/Info")
-stat_node = NodePath("DemoDex/DexSprites/Open/Stats")
-entry_text_label = NodePath("DemoDex/DexSprites/Open/Info/EntryMarquee/Entry")
-hp = NodePath("DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/HP")
-atk = NodePath("DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/ATK")
-def = NodePath("DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/DEF")
-satk = NodePath("DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SATK")
-sdef = NodePath("DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SDEF")
-speed = NodePath("DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SPEED")
+search_bar = NodePath("Dex/SearchBar/Panel/TextEdit")
+search_button = NodePath("Dex/SearchBar/Panel/Button")
+poke_cry = NodePath("PokeCry")
+draggable_area = NodePath("Dex/DexSprites/DraggableArea")
+dex = NodePath("Dex")
+dex_anim = NodePath("Dex/AnimationPlayer")
+search_bar_anim = NodePath("Dex/SearchBar/AnimationPlayer")
+dex_sprites = NodePath("Dex/DexSprites")
+name_id_label = NodePath("Dex/DexSprites/Open/PokeNameID/NameIDLabel")
+poke_image = NodePath("Dex/DexSprites/Open/Info/PokeImage")
+search_toggle = NodePath("Dex/SearchButton")
+closed_sprite = NodePath("Dex/DexSprites/Closed")
+open_sprite = NodePath("Dex/DexSprites/Open")
+icon_1 = NodePath("Dex/DexSprites/Open/Icon1")
+icon_2 = NodePath("Dex/DexSprites/Open/Icon2")
+nav_right = NodePath("Dex/DexSprites/Open/NavRight")
+nav_left = NodePath("Dex/DexSprites/Open/NavLeft")
+genera_label = NodePath("Dex/DexSprites/Open/Info/GeneraLabel")
+flip_button = NodePath("Dex/DexSprites/Open/FlipButton")
+dex_option = NodePath("Dex/DexSprites/Open/OptionButton")
+info_node = NodePath("Dex/DexSprites/Open/Info")
+stat_node = NodePath("Dex/DexSprites/Open/Stats")
+entry_text_label = NodePath("Dex/DexSprites/Open/Info/EntryMarquee/Entry")
+hp = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/HP")
+atk = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/ATK")
+def = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/DEF")
+satk = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SATK")
+sdef = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SDEF")
+speed = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SPEED")
 status_indicator = NodePath("StatusIndicator")
 settings_node = NodePath("Settings")
 
@@ -566,6 +641,7 @@ settings_node = NodePath("Settings")
 [node name="APIEntry" type="HTTPRequest" parent="PokeAPI"]
 
 [node name="Settings" type="Control" parent="."]
+z_index = -5
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -648,21 +724,21 @@ texture_normal = ExtResource("5_47pyn")
 texture_pressed = ExtResource("5_47pyn")
 texture_hover = ExtResource("5_47pyn")
 
-[node name="DemoDex" type="Node2D" parent="."]
-position = Vector2(436, 241)
+[node name="Dex" type="Node2D" parent="."]
+position = Vector2(111, 267)
 
-[node name="DexSprites" type="Node2D" parent="DemoDex"]
+[node name="DexSprites" type="Node2D" parent="Dex"]
 position = Vector2(50, 81)
 
-[node name="Open" type="Sprite2D" parent="DemoDex/DexSprites"]
+[node name="Open" type="Sprite2D" parent="Dex/DexSprites"]
 visible = false
 position = Vector2(-49, -81)
 texture = ExtResource("3_1nn0o")
 centered = false
 
-[node name="Info" type="Node2D" parent="DemoDex/DexSprites/Open"]
+[node name="Info" type="Node2D" parent="Dex/DexSprites/Open"]
 
-[node name="PokeImage" type="TextureRect" parent="DemoDex/DexSprites/Open/Info"]
+[node name="PokeImage" type="TextureRect" parent="Dex/DexSprites/Open/Info"]
 offset_left = 35.0
 offset_top = 78.0
 offset_right = 118.0
@@ -670,7 +746,7 @@ offset_bottom = 130.0
 expand_mode = 1
 stretch_mode = 6
 
-[node name="GeneraLabel" type="Label" parent="DemoDex/DexSprites/Open/Info"]
+[node name="GeneraLabel" type="Label" parent="Dex/DexSprites/Open/Info"]
 clip_contents = true
 offset_left = 34.0
 offset_top = 130.0
@@ -682,7 +758,7 @@ theme_override_font_sizes/font_size = 7
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="EntryMarquee" type="Control" parent="DemoDex/DexSprites/Open/Info"]
+[node name="EntryMarquee" type="Control" parent="Dex/DexSprites/Open/Info"]
 clip_contents = true
 layout_mode = 3
 anchors_preset = 0
@@ -691,7 +767,7 @@ offset_top = 65.0
 offset_right = 283.0
 offset_bottom = 129.0
 
-[node name="Entry" type="Label" parent="DemoDex/DexSprites/Open/Info/EntryMarquee"]
+[node name="Entry" type="Label" parent="Dex/DexSprites/Open/Info/EntryMarquee"]
 modulate = Color(1, 1, 0, 1)
 clip_contents = true
 layout_mode = 1
@@ -707,9 +783,9 @@ theme_override_font_sizes/font_size = 8
 autowrap_mode = 3
 clip_text = true
 
-[node name="Stats" type="Node2D" parent="DemoDex/DexSprites/Open"]
+[node name="Stats" type="Node2D" parent="Dex/DexSprites/Open"]
 
-[node name="Control" type="Control" parent="DemoDex/DexSprites/Open/Stats"]
+[node name="Control" type="Control" parent="Dex/DexSprites/Open/Stats"]
 layout_mode = 3
 anchor_right = 0.603
 anchor_bottom = 0.508
@@ -718,7 +794,7 @@ offset_top = 76.0
 offset_right = 120.0
 offset_bottom = 143.0
 
-[node name="MarginContainer" type="MarginContainer" parent="DemoDex/DexSprites/Open/Stats/Control"]
+[node name="MarginContainer" type="MarginContainer" parent="Dex/DexSprites/Open/Stats/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -727,42 +803,42 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DemoDex/DexSprites/Open/Stats/Control/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Dex/DexSprites/Open/Stats/Control/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = -3
 alignment = 1
 
-[node name="HP" type="Label" parent="DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer"]
+[node name="HP" type="Label" parent="Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_nbopf")
 theme_override_font_sizes/font_size = 11
 
-[node name="ATK" type="Label" parent="DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer"]
+[node name="ATK" type="Label" parent="Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_nbopf")
 theme_override_font_sizes/font_size = 11
 
-[node name="DEF" type="Label" parent="DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer"]
+[node name="DEF" type="Label" parent="Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_nbopf")
 theme_override_font_sizes/font_size = 11
 
-[node name="SATK" type="Label" parent="DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer"]
+[node name="SATK" type="Label" parent="Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_nbopf")
 theme_override_font_sizes/font_size = 11
 
-[node name="SDEF" type="Label" parent="DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer"]
+[node name="SDEF" type="Label" parent="Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_nbopf")
 theme_override_font_sizes/font_size = 11
 
-[node name="SPEED" type="Label" parent="DemoDex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer"]
+[node name="SPEED" type="Label" parent="Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_nbopf")
 theme_override_font_sizes/font_size = 11
 
-[node name="PokeNameID" type="Control" parent="DemoDex/DexSprites/Open"]
+[node name="PokeNameID" type="Control" parent="Dex/DexSprites/Open"]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 17.0
@@ -770,7 +846,7 @@ offset_top = 45.0
 offset_right = 129.0
 offset_bottom = 63.0
 
-[node name="NameIDLabel" type="Label" parent="DemoDex/DexSprites/Open/PokeNameID"]
+[node name="NameIDLabel" type="Label" parent="Dex/DexSprites/Open/PokeNameID"]
 modulate = Color(1, 1, 0, 1)
 clip_contents = true
 layout_mode = 0
@@ -784,7 +860,7 @@ vertical_alignment = 1
 autowrap_mode = 3
 clip_text = true
 
-[node name="NavRight" type="TextureButton" parent="DemoDex/DexSprites/Open"]
+[node name="NavRight" type="TextureButton" parent="Dex/DexSprites/Open"]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -802,7 +878,7 @@ texture_hover = ExtResource("7_v8cqj")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="NavLeft" type="TextureButton" parent="DemoDex/DexSprites/Open"]
+[node name="NavLeft" type="TextureButton" parent="Dex/DexSprites/Open"]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -821,7 +897,7 @@ ignore_texture_size = true
 stretch_mode = 5
 flip_h = true
 
-[node name="CloseButton" type="TextureButton" parent="DemoDex/DexSprites/Open"]
+[node name="CloseButton" type="TextureButton" parent="Dex/DexSprites/Open"]
 offset_left = 241.0
 offset_top = 189.0
 offset_right = 291.0
@@ -834,7 +910,7 @@ texture_hover = ExtResource("7_kec0o")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="CryButton" type="TextureButton" parent="DemoDex/DexSprites/Open"]
+[node name="CryButton" type="TextureButton" parent="Dex/DexSprites/Open"]
 offset_left = 258.0
 offset_top = 146.0
 offset_right = 284.0
@@ -846,7 +922,7 @@ texture_hover = ExtResource("7_e0na7")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="FlipButton" type="TextureButton" parent="DemoDex/DexSprites/Open"]
+[node name="FlipButton" type="TextureButton" parent="Dex/DexSprites/Open"]
 clip_contents = true
 anchors_preset = 2
 anchor_top = 1.0
@@ -863,7 +939,7 @@ texture_hover = ExtResource("16_hprl5")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Icon1" type="TextureRect" parent="DemoDex/DexSprites/Open"]
+[node name="Icon1" type="TextureRect" parent="Dex/DexSprites/Open"]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -876,7 +952,7 @@ tooltip_text = "Sup!"
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Icon2" type="TextureRect" parent="DemoDex/DexSprites/Open"]
+[node name="Icon2" type="TextureRect" parent="Dex/DexSprites/Open"]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -888,12 +964,14 @@ grow_vertical = 0
 expand_mode = 1
 stretch_mode = 5
 
-[node name="OptionButton" type="OptionButton" parent="DemoDex/DexSprites/Open"]
-offset_left = 171.0
-offset_top = 151.0
-offset_right = 254.0
-offset_bottom = 182.0
+[node name="OptionButton" type="OptionButton" parent="Dex/DexSprites/Open"]
+offset_left = 172.0
+offset_top = 148.0
+offset_right = 281.0
+offset_bottom = 179.0
 scale = Vector2(0.73, 0.73)
+theme_override_constants/outline_size = 15
+theme_override_constants/h_separation = 10
 selected = 0
 item_count = 7
 popup/item_0/text = "Info"
@@ -917,14 +995,14 @@ popup/item_6/text = "Forms"
 popup/item_6/id = 5
 popup/item_6/disabled = true
 
-[node name="Closed" type="Sprite2D" parent="DemoDex/DexSprites"]
+[node name="Closed" type="Sprite2D" parent="Dex/DexSprites"]
 position = Vector2(-49, -81)
 texture = ExtResource("2_47d2q")
 centered = false
 region_enabled = true
 region_rect = Rect2(0, 0, 160, 214)
 
-[node name="DraggableArea" type="Sprite2D" parent="DemoDex/DexSprites"]
+[node name="DraggableArea" type="Sprite2D" parent="Dex/DexSprites"]
 z_index = -5
 position = Vector2(-11, -81)
 texture = ExtResource("4_o8jjn")
@@ -932,14 +1010,14 @@ centered = false
 region_enabled = true
 region_rect = Rect2(38, 0, 116.805, 42.8632)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="DemoDex"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Dex"]
 libraries = {
 &"": SubResource("AnimationLibrary_jraj3")
 }
 
-[node name="SearchBar" type="Control" parent="DemoDex"]
+[node name="SearchBar" type="Control" parent="Dex"]
 visible = false
-z_index = -10
+z_index = -1
 layout_mode = 3
 anchors_preset = 0
 offset_left = 2.0
@@ -947,14 +1025,14 @@ offset_right = 42.0
 offset_bottom = 40.0
 mouse_filter = 2
 
-[node name="Panel" type="Panel" parent="DemoDex/SearchBar"]
+[node name="Panel" type="Panel" parent="Dex/SearchBar"]
 layout_mode = 0
 offset_top = 5.06
 offset_right = 153.0
 offset_bottom = 64.06
 theme_override_styles/panel = SubResource("StyleBoxFlat_j5v65")
 
-[node name="TextEdit" type="LineEdit" parent="DemoDex/SearchBar/Panel"]
+[node name="TextEdit" type="LineEdit" parent="Dex/SearchBar/Panel"]
 layout_mode = 1
 offset_left = 4.0
 offset_top = 2.0
@@ -971,7 +1049,7 @@ middle_mouse_paste_enabled = false
 selecting_enabled = false
 drag_and_drop_selection_enabled = false
 
-[node name="Button" type="Button" parent="DemoDex/SearchBar/Panel"]
+[node name="Button" type="Button" parent="Dex/SearchBar/Panel"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -990,7 +1068,7 @@ disabled = true
 icon = ExtResource("6_jraj3")
 flat = true
 
-[node name="SnapToSearchButton" type="Button" parent="DemoDex/SearchBar/Panel"]
+[node name="SnapToSearchButton" type="Button" parent="Dex/SearchBar/Panel"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -1007,12 +1085,12 @@ theme_override_font_sizes/font_size = 14
 disabled = true
 text = "Snap to Search"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="DemoDex/SearchBar"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Dex/SearchBar"]
 libraries = {
 &"": SubResource("AnimationLibrary_nregg")
 }
 
-[node name="SearchButton" type="TextureButton" parent="DemoDex"]
+[node name="SearchButton" type="TextureButton" parent="Dex"]
 clip_children = 2
 offset_left = 3.0
 offset_top = 1.0
@@ -1025,13 +1103,13 @@ texture_hover = ExtResource("9_nregg")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="ShinyEffect" type="Node2D" parent="DemoDex/SearchButton"]
+[node name="ShinyEffect" type="Node2D" parent="Dex/SearchButton"]
 position = Vector2(-3, 2)
 
-[node name="Polygon2D" type="Polygon2D" parent="DemoDex/SearchButton/ShinyEffect"]
+[node name="Polygon2D" type="Polygon2D" parent="Dex/SearchButton/ShinyEffect"]
 polygon = PackedVector2Array(-9, 6, 21, 49, 25, 46, -7, 4)
 
-[node name="Polygon2D2" type="Polygon2D" parent="DemoDex/SearchButton/ShinyEffect"]
+[node name="Polygon2D2" type="Polygon2D" parent="Dex/SearchButton/ShinyEffect"]
 position = Vector2(-8, 7)
 polygon = PackedVector2Array(-9, 6, 21, 49, 25, 46, -7, 4)
 
@@ -1056,16 +1134,52 @@ item_1/id = 1
 item_2/text = "Quit"
 item_2/id = 2
 
-[node name="PassthroughHandler" type="Node2D" parent="."]
+[node name="PassthroughHandler" type="Node2D" parent="." node_paths=PackedStringArray("dex", "main", "h_closed", "h_closed_search", "h_opened", "h_opened_search", "h_settings")]
+script = ExtResource("25_ih5w3")
+dex = NodePath("../Dex")
+main = NodePath("..")
+h_closed = NodePath("Hitboxes/Closed")
+h_closed_search = NodePath("Hitboxes/ClosedSearch")
+h_opened = NodePath("Hitboxes/Opened")
+h_opened_search = NodePath("Hitboxes/OpenedSearch")
+h_settings = NodePath("Hitboxes/Settings")
+
+[node name="Hitboxes" type="Node2D" parent="PassthroughHandler"]
+visible = false
+
+[node name="Closed" type="Polygon2D" parent="PassthroughHandler/Hitboxes"]
+position = Vector2(-4, 0)
+color = Color(1, 1, 1, 0.376471)
+polygon = PackedVector2Array(0, -2, 0, 218, 165, 218, 165, -3)
+
+[node name="ClosedSearch" type="Polygon2D" parent="PassthroughHandler/Hitboxes"]
+position = Vector2(-4, 0)
+color = Color(1, 1, 1, 0.376471)
+polygon = PackedVector2Array(0, -68, 0, 218, 165, 218, 169, -67)
+
+[node name="Opened" type="Polygon2D" parent="PassthroughHandler/Hitboxes"]
+position = Vector2(-4, 0)
+color = Color(1, 1, 1, 0.376471)
+polygon = PackedVector2Array(0, -2, 0, 218, 308, 216, 309, 17, 172, 15, 172, -5)
+
+[node name="OpenedSearch" type="Polygon2D" parent="PassthroughHandler/Hitboxes"]
+position = Vector2(-4, 0)
+color = Color(1, 1, 1, 0.376471)
+polygon = PackedVector2Array(3, -69, 0, 218, 308, 216, 309, 17, 172, 15, 163, -68)
+
+[node name="Settings" type="Polygon2D" parent="PassthroughHandler/Hitboxes"]
+position = Vector2(-4, 0)
+color = Color(1, 1, 1, 0.376471)
+polygon = PackedVector2Array(345, 101, 340, 542, 818, 544, 818, 98)
 
 [connection signal="pressed" from="Settings/MarginContainer/BG/MarginContainer2/TextureButton" to="." method="toggle_settings"]
-[connection signal="pressed" from="DemoDex/DexSprites/Open/NavRight" to="." method="_on_right_button_pressed"]
-[connection signal="pressed" from="DemoDex/DexSprites/Open/NavLeft" to="." method="_on_left_button_pressed"]
-[connection signal="pressed" from="DemoDex/DexSprites/Open/CloseButton" to="." method="_on_close_button_pressed"]
-[connection signal="pressed" from="DemoDex/DexSprites/Open/CryButton" to="." method="_on_cry_button_pressed"]
-[connection signal="pressed" from="DemoDex/DexSprites/Open/FlipButton" to="." method="_on_flip_pressed"]
-[connection signal="item_selected" from="DemoDex/DexSprites/Open/OptionButton" to="." method="_on_option_button_item_selected"]
-[connection signal="button_down" from="DemoDex/SearchButton" to="." method="search_bar_toggle"]
-[connection signal="mouse_entered" from="DemoDex/SearchButton" to="." method="_on_search_button_mouse_entered"]
-[connection signal="mouse_exited" from="DemoDex/SearchButton" to="." method="_on_search_button_mouse_exited"]
+[connection signal="pressed" from="Dex/DexSprites/Open/NavRight" to="." method="_on_right_button_pressed"]
+[connection signal="pressed" from="Dex/DexSprites/Open/NavLeft" to="." method="_on_left_button_pressed"]
+[connection signal="pressed" from="Dex/DexSprites/Open/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="Dex/DexSprites/Open/CryButton" to="." method="_on_cry_button_pressed"]
+[connection signal="pressed" from="Dex/DexSprites/Open/FlipButton" to="." method="_on_flip_pressed"]
+[connection signal="item_selected" from="Dex/DexSprites/Open/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="button_down" from="Dex/SearchButton" to="." method="search_bar_toggle"]
+[connection signal="mouse_entered" from="Dex/SearchButton" to="." method="_on_search_button_mouse_entered"]
+[connection signal="mouse_exited" from="Dex/SearchButton" to="." method="_on_search_button_mouse_exited"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_tray_icon_menu_pressed"]

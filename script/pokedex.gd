@@ -11,7 +11,7 @@ extends Control
 # SEARCH BAR STUFF GO HERE
 @export var search_bar:LineEdit
 @export var search_button:Button
-@onready var poke_cry: AudioStreamPlayer = $PokeCry
+@export var poke_cry: AudioStreamPlayer
 
 # MINI DEX STUFF GO HERE
 var mouse_offset = Vector2.ZERO
@@ -19,13 +19,13 @@ var mouse_offset = Vector2.ZERO
 @export var dex:Node2D
 @export var dex_anim:AnimationPlayer
 @export var search_bar_anim:AnimationPlayer
-@onready var dex_sprites:Node2D = $DemoDex/DexSprites
+@export var dex_sprites:Node2D
 @export var name_id_label:Label
 @export var poke_image: TextureRect
 var image_front:Texture2D
 var image_back:Texture2D
 @export var search_toggle:TextureButton
-var is_open:bool = false
+@export var is_open:bool = false
 @export var closed_sprite:Sprite2D
 @export var open_sprite:Sprite2D
 @export var icon_1:TextureRect
@@ -39,12 +39,12 @@ var is_open:bool = false
 @export var info_node:Node2D
 @export var stat_node:Node2D
 var current_sprite:Sprite2D
-var is_hovering:bool = false
+#@export var is_hovering:bool = false
 var is_waiting:bool = true
-var is_dragging:bool = false
-var is_search_bar_open:bool = true
+@export var is_dragging:bool = false
+@export var is_search_bar_open:bool = true
 var is_mouse_on_search_toggle:bool = false
-var is_settings_toggled:bool = false
+@export var is_settings_toggled:bool = false
 @export var entry_text_label:Label
 @export_category("Stat Node Labels")
 @export var hp: Label
@@ -430,10 +430,12 @@ func _on_option_button_item_selected(index: int) -> void:
 
 func toggle_settings() -> void:
 	if settings_node.visible:
+		is_settings_toggled = false
 		settings_node.hide()
 		dex.show()
 	else:
 		settings_node.show()
+		is_settings_toggled = true
 		dex.hide()
 
 
