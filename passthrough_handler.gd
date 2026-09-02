@@ -13,6 +13,8 @@ extends Node2D
 @export var is_search_bar_open:bool = false
 var is_settings_toggled:bool = false
 @export var is_open:bool = false
+var is_dragging:bool = false
+var was_dragging:bool = false
 
 enum DexState{
 	CLOSED,
@@ -30,7 +32,20 @@ func _process(_delta: float) -> void:
 		is_settings_toggled = true
 	else:
 		is_settings_toggled = false
+	
+	if main.is_dragging:
+		if not was_dragging:
+			# Drag just started
+			DisplayServer.window_set_mouse_passthrough(PackedVector2Array())
+			was_dragging = true
+		
+		return
 
+	else:
+		if was_dragging:
+			# Drag just ended
+			was_dragging = false
+			set_passthrough()
 	
 	# UPDATE THE STATES OVER HERE!!!
 	if is_settings_toggled:

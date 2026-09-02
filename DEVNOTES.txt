@@ -21,6 +21,3 @@ TODOS:
 	when loading pokemon's data, close the pokedex and then flip open again.
 	Setting feature
 	Set passthrough hitbox
-
-
-HIIIII, NOW I CAN USE MY DESKTOP WHILE I USE POKEDEX, DOPEEEEE!!!
