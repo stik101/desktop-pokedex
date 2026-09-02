@@ -115,6 +115,18 @@ tracks/5/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../PassthroughHandler:is_open_close_anim_playing")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_j5v65"]
 resource_name = "closed"
@@ -206,10 +218,22 @@ tracks/6/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../PassthroughHandler:is_open_close_anim_playing")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
 
 [sub_resource type="Animation" id="Animation_1nn0o"]
 resource_name = "open"
-length = 0.5
+length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -268,10 +292,10 @@ tracks/4/path = NodePath("SearchButton:scale")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.0448634, 0.100311),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.0448634, 0.1, 0.100311),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1.42, 0.775), Vector2(0.91, 1.33), Vector2(1, 1)]
+"values": [Vector2(1.42, 0.775), Vector2(0.91, 1.33), Vector2(1, 1), Vector2(1, 1)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -292,10 +316,22 @@ tracks/6/path = NodePath("../PassthroughHandler:is_open")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.1),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../PassthroughHandler:is_open_close_anim_playing")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
 }
 
 [sub_resource type="Animation" id="Animation_jraj3"]
@@ -725,7 +761,6 @@ texture_pressed = ExtResource("5_47pyn")
 texture_hover = ExtResource("5_47pyn")
 
 [node name="Dex" type="Node2D" parent="."]
-position = Vector2(111, 267)
 
 [node name="DexSprites" type="Node2D" parent="Dex"]
 position = Vector2(50, 81)
@@ -1134,7 +1169,7 @@ item_1/id = 1
 item_2/text = "Quit"
 item_2/id = 2
 
-[node name="PassthroughHandler" type="Node2D" parent="." node_paths=PackedStringArray("dex", "main", "h_closed", "h_closed_search", "h_opened", "h_opened_search", "h_settings")]
+[node name="PassthroughHandler" type="Node2D" parent="." node_paths=PackedStringArray("dex", "main", "h_closed", "h_closed_search", "h_opened", "h_opened_search", "h_settings", "h_closed_anim", "h_opened_anim")]
 script = ExtResource("25_ih5w3")
 dex = NodePath("../Dex")
 main = NodePath("..")
@@ -1143,31 +1178,50 @@ h_closed_search = NodePath("Hitboxes/ClosedSearch")
 h_opened = NodePath("Hitboxes/Opened")
 h_opened_search = NodePath("Hitboxes/OpenedSearch")
 h_settings = NodePath("Hitboxes/Settings")
+h_closed_anim = NodePath("Hitboxes/ClosedAnim")
+h_opened_anim = NodePath("Hitboxes/OpenedAnim")
 
 [node name="Hitboxes" type="Node2D" parent="PassthroughHandler"]
 visible = false
 
 [node name="Closed" type="Polygon2D" parent="PassthroughHandler/Hitboxes"]
+visible = false
 position = Vector2(-4, 0)
 color = Color(1, 1, 1, 0.376471)
 polygon = PackedVector2Array(0, -2, 0, 218, 165, 218, 165, -3)
 
+[node name="ClosedAnim" type="Polygon2D" parent="PassthroughHandler/Hitboxes"]
+visible = false
+position = Vector2(-4, 0)
+color = Color(1, 1, 1, 0.376471)
+polygon = PackedVector2Array(-25, -82, -20, 262, 313, 256, 310, -24, 171, -28, 169, -81)
+
 [node name="ClosedSearch" type="Polygon2D" parent="PassthroughHandler/Hitboxes"]
+visible = false
 position = Vector2(-4, 0)
 color = Color(1, 1, 1, 0.376471)
 polygon = PackedVector2Array(0, -68, 0, 218, 165, 218, 169, -67)
 
 [node name="Opened" type="Polygon2D" parent="PassthroughHandler/Hitboxes"]
+visible = false
 position = Vector2(-4, 0)
 color = Color(1, 1, 1, 0.376471)
 polygon = PackedVector2Array(0, -2, 0, 218, 308, 216, 309, 17, 172, 15, 172, -5)
 
+[node name="OpenedAnim" type="Polygon2D" parent="PassthroughHandler/Hitboxes"]
+visible = false
+position = Vector2(-4, 0)
+color = Color(1, 1, 1, 0.376471)
+polygon = PackedVector2Array(-16, -81, -20, 259, 405, 252, 402, -4, 175, -5, 171, -78)
+
 [node name="OpenedSearch" type="Polygon2D" parent="PassthroughHandler/Hitboxes"]
+visible = false
 position = Vector2(-4, 0)
 color = Color(1, 1, 1, 0.376471)
 polygon = PackedVector2Array(3, -69, 0, 218, 308, 216, 309, 17, 172, 15, 163, -68)
 
 [node name="Settings" type="Polygon2D" parent="PassthroughHandler/Hitboxes"]
+visible = false
 position = Vector2(-4, 0)
 color = Color(1, 1, 1, 0.376471)
 polygon = PackedVector2Array(345, 101, 340, 542, 818, 544, 818, 98)

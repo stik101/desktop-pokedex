@@ -10,8 +10,12 @@ extends Node2D
 @export var h_opened:Polygon2D
 @export var h_opened_search:Polygon2D
 @export var h_settings:Polygon2D
+@export var h_closed_anim:Polygon2D
+@export var h_opened_anim:Polygon2D
+@export var is_open_close_anim_playing:bool = false
 @export var is_search_bar_open:bool = false
 var is_settings_toggled:bool = false
+var is_option_menu_open:bool = false
 @export var is_open:bool = false
 var is_dragging:bool = false
 var was_dragging:bool = false
@@ -19,8 +23,10 @@ var was_dragging:bool = false
 enum DexState{
 	CLOSED,
 	CLOSED_SEARCH,
+	CLOSED_ANIM,
 	OPENED,
 	OPENEED_SEARCH,
+	OPENED_ANIM,
 	SETTINGS
 }
 
@@ -32,6 +38,8 @@ func _process(_delta: float) -> void:
 		is_settings_toggled = true
 	else:
 		is_settings_toggled = false
+	
+	is_option_menu_open = main.is_option_button_opened
 	
 	if main.is_dragging:
 		if not was_dragging:
@@ -48,21 +56,29 @@ func _process(_delta: float) -> void:
 			set_passthrough()
 	
 	# UPDATE THE STATES OVER HERE!!!
-	if is_settings_toggled:
-		dex_state = DexState.SETTINGS
-	else:
-		if is_open:
-			if is_search_bar_open:
-				dex_state = DexState.OPENEED_SEARCH
+	if not is_option_menu_open:
+		if is_settings_toggled:
+			dex_state = DexState.SETTINGS
+		elif is_open_close_anim_playing:
+			if is_open:
+				dex_state = DexState.OPENED_ANIM
 			else:
-				dex_state = DexState.OPENED
+				dex_state = DexState.CLOSED_ANIM
 		else:
-			if is_search_bar_open:
-				dex_state = DexState.CLOSED_SEARCH
+			if is_open:
+				if is_search_bar_open:
+					dex_state = DexState.OPENEED_SEARCH
+				else:
+					dex_state = DexState.OPENED
 			else:
-				dex_state = DexState.CLOSED
+				if is_search_bar_open:
+					dex_state = DexState.CLOSED_SEARCH
+				else:
+					dex_state = DexState.CLOSED
+		set_passthrough()
+	else:
+		DisplayServer.window_set_mouse_passthrough(PackedVector2Array())
 	
-	set_passthrough()
 
 func set_passthrough() -> void:
 	var hitbox:Polygon2D
@@ -78,6 +94,10 @@ func set_passthrough() -> void:
 			hitbox = h_opened_search
 		DexState.SETTINGS:
 			hitbox = h_settings
+		DexState.CLOSED_ANIM:
+			hitbox = h_closed_anim
+		DexState.OPENED_ANIM:
+			hitbox = h_opened_anim
 	
 	if hitbox == null:
 		return

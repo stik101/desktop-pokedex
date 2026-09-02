@@ -45,6 +45,7 @@ var is_waiting:bool = true
 @export var is_search_bar_open:bool = true
 var is_mouse_on_search_toggle:bool = false
 @export var is_settings_toggled:bool = false
+@export var is_option_button_opened:bool = false
 @export var entry_text_label:Label
 @export_category("Stat Node Labels")
 @export var hp: Label
@@ -342,6 +343,11 @@ func _process(delta: float) -> void:
 		flip_button.disabled = false
 	else:
 		flip_button.disabled = true
+	
+	if dex_option.get_popup().visible:
+		is_option_button_opened = true
+	else:
+		is_option_button_opened = false
 	
 	if is_dragging:
 		dex.global_position = get_global_mouse_position() + mouse_offset
