@@ -623,7 +623,7 @@ _data = {
 &"popup": SubResource("Animation_aqxlu")
 }
 
-[node name="Pokedex" type="Control" node_paths=PackedStringArray("search_bar", "search_button", "poke_cry", "draggable_area", "dex", "dex_anim", "search_bar_anim", "dex_sprites", "name_id_label", "poke_image", "search_toggle", "closed_sprite", "open_sprite", "icon_1", "icon_2", "nav_right", "nav_left", "genera_label", "flip_button", "dex_option", "info_node", "stat_node", "entry_text_label", "hp", "atk", "def", "satk", "sdef", "speed", "status_indicator", "settings_node")]
+[node name="Pokedex" type="Control" node_paths=PackedStringArray("search_bar", "search_button", "poke_cry", "draggable_area", "dex", "dex_anim", "search_bar_anim", "dex_sprites", "name_id_label", "poke_image", "search_toggle", "closed_sprite", "open_sprite", "icon_1", "icon_2", "nav_right", "nav_left", "genera_label", "flip_button", "dex_option", "info_node", "stat_node", "moves_node", "entry_text_label", "hp", "atk", "def", "satk", "sdef", "speed", "status_indicator", "settings_node", "move_button_placeholder", "move_button_container", "move_desc_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -654,6 +654,7 @@ flip_button = NodePath("Dex/DexSprites/Open/FlipButton")
 dex_option = NodePath("Dex/DexSprites/Open/OptionButton")
 info_node = NodePath("Dex/DexSprites/Open/Info")
 stat_node = NodePath("Dex/DexSprites/Open/Stats")
+moves_node = NodePath("Dex/DexSprites/Open/Moves")
 entry_text_label = NodePath("Dex/DexSprites/Open/Info/EntryMarquee/Entry")
 hp = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/HP")
 atk = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/ATK")
@@ -663,6 +664,9 @@ sdef = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer
 speed = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SPEED")
 status_indicator = NodePath("StatusIndicator")
 settings_node = NodePath("Settings")
+move_button_placeholder = NodePath("Dex/DexSprites/Open/Moves/Control/MarginContainer/VScrollBar/VBoxContainer/Placeholder")
+move_button_container = NodePath("Dex/DexSprites/Open/Moves/Control/MarginContainer/VScrollBar/VBoxContainer")
+move_desc_label = NodePath("Dex/DexSprites/Open/Moves/MoveDescControl/MoveDesc")
 
 [node name="PokeAPI" type="Node" parent="."]
 
@@ -675,6 +679,8 @@ settings_node = NodePath("Settings")
 [node name="APICry" type="HTTPRequest" parent="PokeAPI"]
 
 [node name="APIEntry" type="HTTPRequest" parent="PokeAPI"]
+
+[node name="APIMoves" type="HTTPRequest" parent="PokeAPI"]
 
 [node name="Settings" type="Control" parent="."]
 z_index = -5
@@ -761,6 +767,7 @@ texture_pressed = ExtResource("5_47pyn")
 texture_hover = ExtResource("5_47pyn")
 
 [node name="Dex" type="Node2D" parent="."]
+position = Vector2(489, 225)
 
 [node name="DexSprites" type="Node2D" parent="Dex"]
 position = Vector2(50, 81)
@@ -819,6 +826,7 @@ autowrap_mode = 3
 clip_text = true
 
 [node name="Stats" type="Node2D" parent="Dex/DexSprites/Open"]
+visible = false
 
 [node name="Control" type="Control" parent="Dex/DexSprites/Open/Stats"]
 layout_mode = 3
@@ -872,6 +880,66 @@ theme_override_font_sizes/font_size = 11
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_nbopf")
 theme_override_font_sizes/font_size = 11
+
+[node name="Moves" type="Node2D" parent="Dex/DexSprites/Open"]
+visible = false
+
+[node name="Control" type="Control" parent="Dex/DexSprites/Open/Moves"]
+layout_mode = 3
+anchor_right = 0.603
+anchor_bottom = 0.508
+offset_left = 32.0
+offset_top = 76.0
+offset_right = 120.0
+offset_bottom = 143.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Dex/DexSprites/Open/Moves/Control"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
+
+[node name="VScrollBar" type="ScrollContainer" parent="Dex/DexSprites/Open/Moves/Control/MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Dex/DexSprites/Open/Moves/Control/MarginContainer/VScrollBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="Placeholder" type="Button" parent="Dex/DexSprites/Open/Moves/Control/MarginContainer/VScrollBar/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_nbopf")
+theme_override_font_sizes/font_size = 6
+alignment = 0
+
+[node name="MoveDescControl" type="Control" parent="Dex/DexSprites/Open/Moves"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 171.0
+offset_top = 65.0
+offset_right = 284.0
+offset_bottom = 130.0
+
+[node name="MoveDesc" type="Label" parent="Dex/DexSprites/Open/Moves/MoveDescControl"]
+modulate = Color(1, 1, 0, 1)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -55.5
+offset_right = 55.5
+offset_bottom = 64.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("4_nbopf")
+theme_override_font_sizes/font_size = 8
+autowrap_mode = 3
+clip_text = true
 
 [node name="PokeNameID" type="Control" parent="Dex/DexSprites/Open"]
 layout_mode = 3
@@ -1015,7 +1083,6 @@ popup/item_1/text = "Stats"
 popup/item_1/id = 1
 popup/item_2/text = "Moves"
 popup/item_2/id = 2
-popup/item_2/disabled = true
 popup/item_3/text = "Abilities"
 popup/item_3/id = 3
 popup/item_3/disabled = true
@@ -1227,7 +1294,9 @@ color = Color(1, 1, 1, 0.376471)
 polygon = PackedVector2Array(345, 101, 340, 542, 818, 544, 818, 98)
 
 [connection signal="pressed" from="Settings/MarginContainer/BG/MarginContainer2/TextureButton" to="." method="toggle_settings"]
+[connection signal="pressed" from="Dex/DexSprites/Open/NavRight" to="." method="_on_move_right_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/NavRight" to="." method="_on_right_button_pressed"]
+[connection signal="pressed" from="Dex/DexSprites/Open/NavLeft" to="." method="_on_move_left_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/NavLeft" to="." method="_on_left_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/CloseButton" to="." method="_on_close_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/CryButton" to="." method="_on_cry_button_pressed"]

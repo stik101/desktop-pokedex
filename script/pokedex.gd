@@ -7,6 +7,7 @@ extends Control
 @onready var api_image_back: HTTPRequest = $PokeAPI/APIImageBack
 @onready var api_cry: HTTPRequest = $PokeAPI/APICry
 @onready var api_entry: HTTPRequest = $PokeAPI/APIEntry
+@onready var api_moves: HTTPRequest = $PokeAPI/APIMoves
 
 # SEARCH BAR STUFF GO HERE
 @export var search_bar:LineEdit
@@ -38,6 +39,7 @@ var image_back:Texture2D
 @export var dex_option:OptionButton
 @export var info_node:Node2D
 @export var stat_node:Node2D
+@export var moves_node:Node2D
 var current_sprite:Sprite2D
 #@export var is_hovering:bool = false
 var is_waiting:bool = true
@@ -59,6 +61,9 @@ var is_mouse_on_search_toggle:bool = false
 # The tooltip app is handled by StatusIndicator Node
 @export var status_indicator:StatusIndicator
 @export var settings_node:Control
+@export var move_button_placeholder:Button
+@export var move_button_container:VBoxContainer
+@export var move_desc_label:Label
 
 # TO CHECK IF ALL DATA IS LOADED:
 var got_data:bool = true
@@ -78,6 +83,7 @@ var p_height:float
 var p_weight:float
 var p_type:Array[String]
 var p_moves:Array[String]
+var p_move_entry:String
 var p_abilities:Array[String]
 var p_hp:int
 var p_speed:int
@@ -94,6 +100,9 @@ const CHAR_LIMIT:int = 88
 var entry_pages:Array[String] = []
 var current_page:int = 0
 
+var move_pages: Array[String] = []
+var current_move_page: int = 0
+
 
 # API LINKS GO HERE
 var api_link:String = "https://pokeapi.co/api/v2/pokemon/"
@@ -103,6 +112,7 @@ var cry_link:String = 'https://raw.githubusercontent.com/PokeAPI/cries/main/crie
 var cry_link_legacy:String = 'https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/legacy/'
 var species_link:String = "https://pokeapi.co/api/v2/pokemon-species/"
 var type_url:String = "res://type_icons/"
+var moves_link:String = "https://pokeapi.co/api/v2/move/"
 
 # Connect a lota signals (mostly of APIs)
 func _ready() -> void:
@@ -120,6 +130,7 @@ func _ready() -> void:
 	api_image_back.request_completed.connect(_on_request_pokeimage_back)
 	api_cry.request_completed.connect(_on_request_pokecry)
 	api_entry.request_completed.connect(_on_request_pokeentry)
+	api_moves.request_completed.connect(_on_request_move_info)
 
 func toggle_dex(mouse_button: int, mouse_position: Vector2i) -> void:
 	if dex.visible:
@@ -154,8 +165,8 @@ func _on_request_pokedata(result:int, response_code:int, headers:PackedStringArr
 	
 	var data:Dictionary = json.data
 	
-	# COLLECTING ALL DATAS OF POKEMON HERE ON
-	#Name
+	# COLLECTING ALL DATAS OF POKEMON 	
+	
 	p_name = data["name"]
 	
 	#ID
@@ -219,6 +230,7 @@ func _on_request_pokedata(result:int, response_code:int, headers:PackedStringArr
 	search_image() # since now weve id, we can search the pokemon image
 	search_cry()
 	search_entry()
+	set_moves()
 
 func set_type():
 	if len(p_type) == 1:
@@ -337,6 +349,39 @@ func _on_request_pokeentry(result:int, response_code:int, headers:PackedStringAr
 	entry_text_label.text = entry_pages[current_page]
 	got_entry = true
 
+func _on_request_move_info(result, response_code, headers, body) -> void:
+	if response_code != 200:
+		print("Move search failed:", response_code)
+		return
+	
+	var data = JSON.parse_string(body.get_string_from_utf8())
+	
+	for entry in data["flavor_text_entries"]:
+		if entry["language"]["name"] == SettingsGlobal.language:
+			p_move_entry = entry["flavor_text"]
+			break
+	
+	move_pages.clear()
+	current_move_page = 0
+
+	var description_to_split := p_move_entry
+
+	while description_to_split.length() > CHAR_LIMIT:
+		var split_at: int = description_to_split.rfind(" ", CHAR_LIMIT)
+		
+		if split_at == -1:
+			split_at = CHAR_LIMIT
+		
+		move_pages.append(description_to_split.substr(0, split_at))
+		description_to_split = description_to_split.substr(split_at + 1)
+
+	if description_to_split.length() > 0:
+		move_pages.append(description_to_split)
+
+	if move_pages.size() > 0:
+		move_desc_label.text = move_pages[current_move_page]
+
+
 func _process(delta: float) -> void:
 	#Check if recieved all data of earlier pokemon, then only we can search next one
 	if got_cry and got_data and got_entry and got_sprite_back and got_sprite_front:
@@ -384,6 +429,18 @@ func _input(event: InputEvent) -> void:
 						dex_anim.play("open")
 						is_open = true
 
+func set_moves() -> void:
+	for m in p_moves:
+		var move_button:Button = move_button_placeholder.duplicate()
+		move_button.text = m
+		move_button.show()
+		move_button_container.add_child(move_button)
+		move_button.pressed.connect(search_move_info.bind(m))
+
+func search_move_info(move_name:String) -> void:
+	print("Searching for:", move_name)
+	api_moves.request(moves_link + move_name)
+
 func _on_cry_button_pressed() -> void:
 	poke_cry.play()
 
@@ -408,14 +465,30 @@ func _on_search_button_mouse_exited() -> void:
 # THESE ARE FOR NAVIGATION BUTTONS FOR TEXT ENTRIES
 
 func _on_right_button_pressed() -> void:
-	if current_page + 1 < entry_pages.size():
-		current_page += 1
-		entry_text_label.text = entry_pages[current_page]
+	if info_node.visible:
+		if current_page + 1 < entry_pages.size():
+			current_page += 1
+			entry_text_label.text = entry_pages[current_page]
 
 func _on_left_button_pressed() -> void:
-	if current_page > 0:
-		current_page -= 1
-		entry_text_label.text = entry_pages[current_page]
+	if info_node.visible:
+		if current_page > 0:
+			current_page -= 1
+			entry_text_label.text = entry_pages[current_page]
+		
+
+func _on_move_right_button_pressed() -> void:
+	if moves_node.visible:
+		if current_move_page + 1 < move_pages.size():
+			current_move_page += 1
+			move_desc_label.text = move_pages[current_move_page]
+
+
+func _on_move_left_button_pressed() -> void:
+	if moves_node.visible:
+		if current_move_page > 0:
+			current_move_page -= 1
+			move_desc_label.text = move_pages[current_move_page]
 
 
 func _on_flip_pressed() -> void:
@@ -429,10 +502,13 @@ func _on_flip_pressed() -> void:
 func _on_option_button_item_selected(index: int) -> void:
 	info_node.hide()
 	stat_node.hide()
+	moves_node.hide()
 	if index == 0:
 		info_node.show()
 	if index == 1:
 		stat_node.show()
+	if index == 2:
+		moves_node.show()
 
 func toggle_settings() -> void:
 	if settings_node.visible:
