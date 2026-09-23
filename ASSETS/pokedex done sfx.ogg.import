@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dn5l0v5jdp2g2"
+path="res://.godot/imported/pokedex done sfx.ogg-5933de75475a955db1e1987bd7a6d7f9.oggvorbisstr"
+
+[deps]
+
+source_file="res://ASSETS/pokedex done sfx.ogg"
+dest_files=["res://.godot/imported/pokedex done sfx.ogg-5933de75475a955db1e1987bd7a6d7f9.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

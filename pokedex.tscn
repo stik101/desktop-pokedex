@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://b6qqwi7forvta"]
+[gd_scene load_steps=42 format=3 uid="uid://b6qqwi7forvta"]
 
 [ext_resource type="Script" uid="uid://bl5vlwt6f4ao3" path="res://script/pokedex.gd" id="1_c5by8"]
 [ext_resource type="Texture2D" uid="uid://cbg2v5ttd7nky" path="res://pokedex base sprite.png" id="2_47d2q"]
@@ -22,9 +22,12 @@
 [ext_resource type="Texture2D" uid="uid://dgbtf0anxtyrw" path="res://ASSETS/flip button/flip normal.png" id="14_ovi7i"]
 [ext_resource type="Texture2D" uid="uid://c6ugb6cqygsxf" path="res://ASSETS/flip button/flip pressed.png" id="15_152mf"]
 [ext_resource type="Texture2D" uid="uid://j1dm8djm4u18" path="res://ASSETS/flip button/flip hover.png" id="16_hprl5"]
+[ext_resource type="Texture2D" uid="uid://dr5xcrpv0uw0u" path="res://ASSETS/net stat/net disconnected.png" id="19_fpmvi"]
+[ext_resource type="Texture2D" uid="uid://cbteeloroh0ky" path="res://ASSETS/net stat/net ok.png" id="20_et2vs"]
 [ext_resource type="Texture2D" uid="uid://1763qf2ag8or" path="res://icon.png" id="23_152mf"]
 [ext_resource type="FontFile" uid="uid://yynbep0qqycx" path="res://ASSETS/Reversal Bd.otf" id="23_hprl5"]
 [ext_resource type="Script" uid="uid://dqyner3yx1vey" path="res://passthrough_handler.gd" id="25_ih5w3"]
+[ext_resource type="AudioStream" uid="uid://dn5l0v5jdp2g2" path="res://ASSETS/pokedex done sfx.ogg" id="26_awflw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_152mf"]
 bg_color = Color(0.756863, 0, 0, 1)
@@ -40,6 +43,25 @@ corner_radius_bottom_left = 20
 shadow_color = Color(0, 0, 0, 0.188235)
 shadow_size = 10
 shadow_offset = Vector2(10, 10)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n2jrc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_fpmvi")
+}],
+"loop": true,
+"name": &"disconnected",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_et2vs")
+}],
+"loop": true,
+"name": &"ok",
+"speed": 5.0
+}]
 
 [sub_resource type="Animation" id="Animation_o8jjn"]
 length = 0.001
@@ -623,7 +645,7 @@ _data = {
 &"popup": SubResource("Animation_aqxlu")
 }
 
-[node name="Pokedex" type="Control" node_paths=PackedStringArray("search_bar", "search_button", "poke_cry", "draggable_area", "dex", "dex_anim", "search_bar_anim", "dex_sprites", "name_id_label", "poke_image", "search_toggle", "closed_sprite", "open_sprite", "icon_1", "icon_2", "nav_right", "nav_left", "genera_label", "flip_button", "dex_option", "info_node", "stat_node", "moves_node", "entry_text_label", "hp", "atk", "def", "satk", "sdef", "speed", "status_indicator", "settings_node", "move_button_placeholder", "move_button_container", "move_desc_label")]
+[node name="Pokedex" type="Control" node_paths=PackedStringArray("netchecker", "net_stat", "search_bar", "search_button", "poke_cry", "draggable_area", "dex", "dex_anim", "search_bar_anim", "dex_sprites", "name_id_label", "poke_image", "search_toggle", "closed_sprite", "open_sprite", "icon_1", "icon_2", "nav_right", "nav_left", "genera_label", "flip_button", "dex_option", "info_node", "stat_node", "moves_node", "entry_text_label", "dex_complete_sfx", "hp", "atk", "def", "satk", "sdef", "speed", "shiny_sprite_toggle", "legacy_cry_button", "status_indicator", "settings_node", "move_button_placeholder", "move_button_container", "move_desc_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -632,6 +654,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_c5by8")
+netchecker = NodePath("NetChecker")
+net_stat = NodePath("Dex/DexSprites/NetStat")
 search_bar = NodePath("Dex/SearchBar/Panel/TextEdit")
 search_button = NodePath("Dex/SearchBar/Panel/Button")
 poke_cry = NodePath("PokeCry")
@@ -656,12 +680,15 @@ info_node = NodePath("Dex/DexSprites/Open/Info")
 stat_node = NodePath("Dex/DexSprites/Open/Stats")
 moves_node = NodePath("Dex/DexSprites/Open/Moves")
 entry_text_label = NodePath("Dex/DexSprites/Open/Info/EntryMarquee/Entry")
+dex_complete_sfx = NodePath("DexComplete")
 hp = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/HP")
 atk = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/ATK")
 def = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/DEF")
 satk = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SATK")
 sdef = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SDEF")
 speed = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SPEED")
+shiny_sprite_toggle = NodePath("Settings/MarginContainer/BG/MarginContainer/VBoxContainer/ShinySpriteToggler/Button")
+legacy_cry_button = NodePath("Settings/MarginContainer/BG/MarginContainer/VBoxContainer/LegacyCryToggler/Button")
 status_indicator = NodePath("StatusIndicator")
 settings_node = NodePath("Settings")
 move_button_placeholder = NodePath("Dex/DexSprites/Open/Moves/Control/MarginContainer/VScrollBar/VBoxContainer/Placeholder")
@@ -727,18 +754,30 @@ theme_override_font_sizes/font_size = 51
 text = "Settings"
 horizontal_alignment = 1
 
-[node name="Placeholder1" type="MarginContainer" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer"]
+[node name="ShinySpriteToggler" type="MarginContainer" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 30
 
-[node name="Button" type="CheckBox" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer/Placeholder1"]
+[node name="Button" type="CheckBox" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer/ShinySpriteToggler"]
 layout_mode = 2
 theme_override_constants/outline_size = 15
 theme_override_constants/h_separation = 10
 theme_override_fonts/font = ExtResource("23_hprl5")
-text = "Lol funny settings go here"
+text = "Show shiny sprites"
+
+[node name="LegacyCryToggler" type="MarginContainer" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+
+[node name="Button" type="CheckBox" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer/LegacyCryToggler"]
+layout_mode = 2
+theme_override_constants/outline_size = 15
+theme_override_constants/h_separation = 10
+theme_override_fonts/font = ExtResource("23_hprl5")
+text = "Play Legacy Cry"
 
 [node name="Placeholder2" type="MarginContainer" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 30
 
@@ -767,7 +806,7 @@ texture_pressed = ExtResource("5_47pyn")
 texture_hover = ExtResource("5_47pyn")
 
 [node name="Dex" type="Node2D" parent="."]
-position = Vector2(489, 225)
+position = Vector2(431, 277)
 
 [node name="DexSprites" type="Node2D" parent="Dex"]
 position = Vector2(50, 81)
@@ -960,7 +999,6 @@ offset_bottom = 17.0
 theme_override_fonts/font = ExtResource("4_nbopf")
 theme_override_font_sizes/font_size = 11
 vertical_alignment = 1
-autowrap_mode = 3
 clip_text = true
 
 [node name="NavRight" type="TextureButton" parent="Dex/DexSprites/Open"]
@@ -1112,6 +1150,14 @@ centered = false
 region_enabled = true
 region_rect = Rect2(38, 0, 116.805, 42.8632)
 
+[node name="NetStat" type="AnimatedSprite2D" parent="Dex/DexSprites"]
+position = Vector2(60, -78)
+scale = Vector2(0.4, 0.4)
+sprite_frames = SubResource("SpriteFrames_n2jrc")
+animation = &"disconnected"
+autoplay = "disconnected"
+centered = false
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Dex"]
 libraries = {
 &"": SubResource("AnimationLibrary_jraj3")
@@ -1221,6 +1267,9 @@ polygon = PackedVector2Array(-9, 6, 21, 49, 25, 46, -7, 4)
 
 [node name="DexClose" type="AudioStreamPlayer" parent="."]
 
+[node name="DexComplete" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("26_awflw")
+
 [node name="StatusIndicator" type="StatusIndicator" parent="."]
 tooltip = "Desktop Pokedex"
 icon = ExtResource("23_152mf")
@@ -1293,11 +1342,17 @@ position = Vector2(-4, 0)
 color = Color(1, 1, 1, 0.376471)
 polygon = PackedVector2Array(345, 101, 340, 542, 818, 544, 818, 98)
 
+[node name="NetChecker" type="HTTPRequest" parent="."]
+timeout = 3.0
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
 [connection signal="pressed" from="Settings/MarginContainer/BG/MarginContainer2/TextureButton" to="." method="toggle_settings"]
 [connection signal="pressed" from="Dex/DexSprites/Open/NavRight" to="." method="_on_move_right_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/NavRight" to="." method="_on_right_button_pressed"]
-[connection signal="pressed" from="Dex/DexSprites/Open/NavLeft" to="." method="_on_move_left_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/NavLeft" to="." method="_on_left_button_pressed"]
+[connection signal="pressed" from="Dex/DexSprites/Open/NavLeft" to="." method="_on_move_left_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/CloseButton" to="." method="_on_close_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/CryButton" to="." method="_on_cry_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/FlipButton" to="." method="_on_flip_pressed"]
@@ -1306,3 +1361,4 @@ polygon = PackedVector2Array(345, 101, 340, 542, 818, 544, 818, 98)
 [connection signal="mouse_entered" from="Dex/SearchButton" to="." method="_on_search_button_mouse_entered"]
 [connection signal="mouse_exited" from="Dex/SearchButton" to="." method="_on_search_button_mouse_exited"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_tray_icon_menu_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_netcheck_timeout"]

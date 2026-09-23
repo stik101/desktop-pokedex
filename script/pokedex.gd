@@ -8,6 +8,11 @@ extends Control
 @onready var api_cry: HTTPRequest = $PokeAPI/APICry
 @onready var api_entry: HTTPRequest = $PokeAPI/APIEntry
 @onready var api_moves: HTTPRequest = $PokeAPI/APIMoves
+@export var netchecker: HTTPRequest
+
+
+@export var net_stat: AnimatedSprite2D
+var checking_internet: bool = false
 
 # SEARCH BAR STUFF GO HERE
 @export var search_bar:LineEdit
@@ -41,7 +46,6 @@ var image_back:Texture2D
 @export var stat_node:Node2D
 @export var moves_node:Node2D
 var current_sprite:Sprite2D
-#@export var is_hovering:bool = false
 var is_waiting:bool = true
 @export var is_dragging:bool = false
 @export var is_search_bar_open:bool = true
@@ -49,6 +53,7 @@ var is_mouse_on_search_toggle:bool = false
 @export var is_settings_toggled:bool = false
 @export var is_option_button_opened:bool = false
 @export var entry_text_label:Label
+@export var dex_complete_sfx:AudioStreamPlayer
 @export_category("Stat Node Labels")
 @export var hp: Label
 @export var atk: Label
@@ -56,6 +61,13 @@ var is_mouse_on_search_toggle:bool = false
 @export var satk: Label
 @export var sdef: Label
 @export var speed: Label
+
+# SETTINGS STUFF GO HERE
+
+var is_shiny_sprite:bool
+@export var shiny_sprite_toggle:CheckBox
+var is_cry_legacy:bool
+@export var legacy_cry_button:CheckBox
 
 @export_category("Misc")
 # The tooltip app is handled by StatusIndicator Node
@@ -108,6 +120,8 @@ var current_move_page: int = 0
 var api_link:String = "https://pokeapi.co/api/v2/pokemon/"
 var image_front_link:String = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'
 var image_back_link:String = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/'
+var image_front_shiny_link:String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/"
+var image_back_shiny_link:String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/"
 var cry_link:String = 'https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/'
 var cry_link_legacy:String = 'https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/legacy/'
 var species_link:String = "https://pokeapi.co/api/v2/pokemon-species/"
@@ -116,6 +130,8 @@ var moves_link:String = "https://pokeapi.co/api/v2/move/"
 
 # Connect a lota signals (mostly of APIs)
 func _ready() -> void:
+	
+	netchecker.request_completed.connect(on_api_netcheck)
 	stat_node.hide()
 	current_sprite = closed_sprite
 	dex.show()
@@ -214,23 +230,15 @@ func _on_request_pokedata(result:int, response_code:int, headers:PackedStringArr
 	# TODO: REMOVE AFTER IMPLEMENTING
 	print(int(data["id"]),'. ', data["name"])
 	print("Height: ", str(p_height), " Weight: ", str(p_weight))
-	print("Type: ", p_type)
-	print("Moves: ", p_moves)
 	print("\nAbilities: ", p_abilities)
-	print("\nBASE STATS\n")
-	print("HP: ", p_hp)
-	print("Atk: ", p_attack)
-	print("DEF: ", p_defence)
-	print("S. ATK: ", p_sattack)
-	print("S. DEF: ", p_sdefence)
-	print("SPD: ", p_speed)
 	
 	name_id_label.text = str(p_id) + '. ' + str(p_name)
-	set_type()
-	search_image() # since now weve id, we can search the pokemon image
-	search_cry()
-	search_entry()
-	set_moves()
+	await set_type()
+	await search_image() # since now weve id, we can search the pokemon image
+	await search_cry()
+	await search_entry()
+	await set_moves()
+	dex_complete_sfx.play()
 
 func set_type():
 	if len(p_type) == 1:
@@ -247,12 +255,16 @@ func set_type():
 		icon_2.texture = null
 
 func search_image() -> void:
-	var error = api_image_front.request(image_front_link + str(p_id) + '.png')
-	error = api_image_back.request(image_back_link + str(p_id) + '.png')
+	if is_shiny_sprite:
+		var error = api_image_front.request(image_front_shiny_link + str(p_id) + '.png')
+		error = api_image_back.request(image_back_shiny_link + str(p_id) + '.png')
+	else:
+		var error = api_image_front.request(image_front_link + str(p_id) + '.png')
+		error = api_image_back.request(image_back_link + str(p_id) + '.png')
 
 func search_cry() -> void:
 	var error
-	if not (p_id == 25 or p_id == 133):
+	if not (p_id == 25 or p_id == 133) and !is_cry_legacy:
 		error = api_cry.request(cry_link + str(p_id) + '.ogg')
 	else:
 		error = api_cry.request(cry_link_legacy + str(p_id) + '.ogg')
@@ -383,6 +395,8 @@ func _on_request_move_info(result, response_code, headers, body) -> void:
 
 
 func _process(delta: float) -> void:
+	is_shiny_sprite = shiny_sprite_toggle.button_pressed
+	is_cry_legacy = legacy_cry_button.button_pressed
 	#Check if recieved all data of earlier pokemon, then only we can search next one
 	if got_cry and got_data and got_entry and got_sprite_back and got_sprite_front:
 		flip_button.disabled = false
@@ -527,3 +541,27 @@ func _on_tray_icon_menu_pressed(id: int) -> void:
 		toggle_settings()
 	if id == 2:
 		get_tree().quit()
+
+
+# CODE FOR CHECKING INTERNET CONNECTION GO HERE
+
+func check_internet():
+	if checking_internet:
+		return
+
+	checking_internet = true
+	netchecker.request("https://www.google.com/generate_204")
+
+
+func on_api_netcheck(result, response_code, headers, body):
+	checking_internet = false
+
+	if result == HTTPRequest.RESULT_SUCCESS and response_code == 204:
+		#print("Internet connected!")
+		net_stat.animation = "ok"
+	else:
+		#print("No internet connection!")
+		net_stat.animation = "disconnected"
+
+func _on_timer_netcheck_timeout() -> void:
+	check_internet()
