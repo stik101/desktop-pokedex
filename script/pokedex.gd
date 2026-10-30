@@ -10,6 +10,15 @@ extends Control
 @onready var api_moves: HTTPRequest = $PokeAPI/APIMoves
 @export var netchecker: HTTPRequest
 
+# FOR HANDLING GENDER DIFFERENCES, listing all pokemons with seperate ones
+
+var gender_forms:Dictionary = {
+	"nidoran": ["nidoran-m", "nidoran-f"],
+	"meowstic": ["meowstic-male", "meowstic-female"],
+	"indeedee": ["indeedee-male", "indeedee-female"],
+	"basculegion": ["basculegion-male", "basculegion-female"],
+	"oinkologne": ["oinkologne-male", "oinkologne-female"]
+}
 
 @export var net_stat: AnimatedSprite2D
 var checking_internet: bool = false
@@ -18,6 +27,9 @@ var checking_internet: bool = false
 @export var search_bar:LineEdit
 @export var search_button:Button
 @export var poke_cry: AudioStreamPlayer
+@export var gender_area:Control # The Control node with option selection for gender
+@export var search_area:Control
+var is_asking_for_gender:bool = false
 
 # MINI DEX STUFF GO HERE
 var mouse_offset = Vector2.ZERO
@@ -54,6 +66,7 @@ var is_mouse_on_search_toggle:bool = false
 @export var is_option_button_opened:bool = false
 @export var entry_text_label:Label
 @export var dex_complete_sfx:AudioStreamPlayer
+@export var dex_invalid_sfx:AudioStreamPlayer
 @export_category("Stat Node Labels")
 @export var hp: Label
 @export var atk: Label
@@ -68,6 +81,7 @@ var is_shiny_sprite:bool
 @export var shiny_sprite_toggle:CheckBox
 var is_cry_legacy:bool
 @export var legacy_cry_button:CheckBox
+@export var cry_volume_slider:HSlider
 
 @export_category("Misc")
 # The tooltip app is handled by StatusIndicator Node
@@ -130,7 +144,7 @@ var moves_link:String = "https://pokeapi.co/api/v2/move/"
 
 # Connect a lota signals (mostly of APIs)
 func _ready() -> void:
-	
+	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS, true)
 	netchecker.request_completed.connect(on_api_netcheck)
 	stat_node.hide()
 	current_sprite = closed_sprite
@@ -156,10 +170,33 @@ func toggle_dex(mouse_button: int, mouse_position: Vector2i) -> void:
 
 # For search bar field
 func search() -> void:
-	var text:String = search_bar.text.to_lower()
-	print("FETCHING DATA (Where's my farfetch'd?)")
-	var error = api.request(api_link + text)
-	
+	var text:String = search_bar.text.to_lower().trim_prefix(" ").trim_suffix(" ").replace(" ", "-") # handles spaces
+	api.cancel_request()
+	if search_bar.text != '':
+		print("FETCHING DATA (Where's my farfetch'd?)")
+		print(text)
+		if gender_forms.has(text):
+			is_asking_for_gender = true
+		else:
+			var error = api.request(api_link + text)
+		
+			if error != OK:
+				print("Oops, there's an error when data was recieved!", str(error))
+			else:
+				got_data = false
+				got_sprite_front= false
+				got_sprite_back = false
+				got_cry = false
+				got_entry = false
+
+func search_gender_form(is_female:bool):
+	var text = search_bar.text.to_lower().trim_prefix(" ").trim_suffix(" ").replace(" ", "-")
+	var error:Error
+	if is_female:
+		error = api.request(api_link + gender_forms[text][1])
+	else:
+		error = api.request(api_link + gender_forms[text][0])
+	is_asking_for_gender = false
 	if error != OK:
 		print("Oops, there's an error when data was recieved!", str(error))
 	else:
@@ -175,15 +212,24 @@ func _on_request_pokedata(result:int, response_code:int, headers:PackedStringArr
 	var json = JSON.new()
 	var error = json.parse(body.get_string_from_utf8())
 	
+	if result != HTTPRequest.RESULT_SUCCESS:
+		print("Network error. Could not connect to PokeAPI.")
+		return
+	
 	if error != OK:
 		print("OOPS! There's an error in parsing json")
+		return
+	
+	if response_code == 404:
+		print("Invalid Pokémon name!")
+		_handle_invalid_pokemon()
 		return
 	
 	var data:Dictionary = json.data
 	
 	# COLLECTING ALL DATAS OF POKEMON 	
 	
-	p_name = data["name"]
+	p_name = data["name"].replace("-", " ")
 	
 	#ID
 	p_id = data["id"]
@@ -239,6 +285,9 @@ func _on_request_pokedata(result:int, response_code:int, headers:PackedStringArr
 	await search_entry()
 	await set_moves()
 	dex_complete_sfx.play()
+
+func _handle_invalid_pokemon() -> void:
+	dex_invalid_sfx.play()
 
 func set_type():
 	if len(p_type) == 1:
@@ -416,7 +465,16 @@ func _process(delta: float) -> void:
 			dex_sprites.modulate = Color("e4e4e4")
 		else:
 			dex_sprites.modulate = Color("ffffff")
-
+	
+	# Checks if dearch bar needs to show gender options:
+	# Maybe move it to a single time running function instead of process :P
+	if is_asking_for_gender:
+		gender_area.show()
+		search_area.hide()
+	else:
+		gender_area.hide()
+		search_area.show()
+	
 # To flip open the pokedex
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -446,7 +504,7 @@ func _input(event: InputEvent) -> void:
 func set_moves() -> void:
 	for m in p_moves:
 		var move_button:Button = move_button_placeholder.duplicate()
-		move_button.text = m
+		move_button.text = m.replace("-", " ")
 		move_button.show()
 		move_button_container.add_child(move_button)
 		move_button.pressed.connect(search_move_info.bind(m))
@@ -565,3 +623,8 @@ func on_api_netcheck(result, response_code, headers, body):
 
 func _on_timer_netcheck_timeout() -> void:
 	check_internet()
+
+
+func _on_cry_sfx_volume_changed(value: float) -> void:
+	poke_cry.volume_linear = value
+	print(poke_cry.volume_linear)

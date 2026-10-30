@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://b6qqwi7forvta"]
+[gd_scene load_steps=43 format=3 uid="uid://b6qqwi7forvta"]
 
 [ext_resource type="Script" uid="uid://bl5vlwt6f4ao3" path="res://script/pokedex.gd" id="1_c5by8"]
 [ext_resource type="Texture2D" uid="uid://cbg2v5ttd7nky" path="res://pokedex base sprite.png" id="2_47d2q"]
@@ -28,6 +28,7 @@
 [ext_resource type="FontFile" uid="uid://yynbep0qqycx" path="res://ASSETS/Reversal Bd.otf" id="23_hprl5"]
 [ext_resource type="Script" uid="uid://dqyner3yx1vey" path="res://passthrough_handler.gd" id="25_ih5w3"]
 [ext_resource type="AudioStream" uid="uid://dn5l0v5jdp2g2" path="res://ASSETS/pokedex done sfx.ogg" id="26_awflw"]
+[ext_resource type="AudioStream" uid="uid://cgaal4mq6ki8" path="res://ASSETS/invalid.mp3" id="27_et2vs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_152mf"]
 bg_color = Color(0.756863, 0, 0, 1)
@@ -430,7 +431,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Panel/TextEdit:editable")
+tracks/1/path = NodePath("Panel/SearchArea/TextEdit:editable")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -442,7 +443,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Panel/Button:disabled")
+tracks/2/path = NodePath("Panel/SearchArea/Button:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -505,7 +506,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Panel/TextEdit:editable")
+tracks/1/path = NodePath("Panel/SearchArea/TextEdit:editable")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -517,7 +518,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Panel/Button:disabled")
+tracks/2/path = NodePath("Panel/SearchArea/Button:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -580,7 +581,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Panel/TextEdit:editable")
+tracks/1/path = NodePath("Panel/SearchArea/TextEdit:editable")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -592,7 +593,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Panel/Button:disabled")
+tracks/2/path = NodePath("Panel/SearchArea/Button:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -645,7 +646,7 @@ _data = {
 &"popup": SubResource("Animation_aqxlu")
 }
 
-[node name="Pokedex" type="Control" node_paths=PackedStringArray("netchecker", "net_stat", "search_bar", "search_button", "poke_cry", "draggable_area", "dex", "dex_anim", "search_bar_anim", "dex_sprites", "name_id_label", "poke_image", "search_toggle", "closed_sprite", "open_sprite", "icon_1", "icon_2", "nav_right", "nav_left", "genera_label", "flip_button", "dex_option", "info_node", "stat_node", "moves_node", "entry_text_label", "dex_complete_sfx", "hp", "atk", "def", "satk", "sdef", "speed", "shiny_sprite_toggle", "legacy_cry_button", "status_indicator", "settings_node", "move_button_placeholder", "move_button_container", "move_desc_label")]
+[node name="Pokedex" type="Control" node_paths=PackedStringArray("netchecker", "net_stat", "search_bar", "search_button", "poke_cry", "gender_area", "search_area", "draggable_area", "dex", "dex_anim", "search_bar_anim", "dex_sprites", "name_id_label", "poke_image", "search_toggle", "closed_sprite", "open_sprite", "icon_1", "icon_2", "nav_right", "nav_left", "genera_label", "flip_button", "dex_option", "info_node", "stat_node", "moves_node", "entry_text_label", "dex_complete_sfx", "dex_invalid_sfx", "hp", "atk", "def", "satk", "sdef", "speed", "shiny_sprite_toggle", "legacy_cry_button", "cry_volume_slider", "status_indicator", "settings_node", "move_button_placeholder", "move_button_container", "move_desc_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -656,9 +657,11 @@ mouse_filter = 1
 script = ExtResource("1_c5by8")
 netchecker = NodePath("NetChecker")
 net_stat = NodePath("Dex/DexSprites/NetStat")
-search_bar = NodePath("Dex/SearchBar/Panel/TextEdit")
-search_button = NodePath("Dex/SearchBar/Panel/Button")
+search_bar = NodePath("Dex/SearchBar/Panel/SearchArea/TextEdit")
+search_button = NodePath("Dex/SearchBar/Panel/SearchArea/Button")
 poke_cry = NodePath("PokeCry")
+gender_area = NodePath("Dex/SearchBar/Panel/GenderSelect")
+search_area = NodePath("Dex/SearchBar/Panel/SearchArea")
 draggable_area = NodePath("Dex/DexSprites/DraggableArea")
 dex = NodePath("Dex")
 dex_anim = NodePath("Dex/AnimationPlayer")
@@ -681,6 +684,7 @@ stat_node = NodePath("Dex/DexSprites/Open/Stats")
 moves_node = NodePath("Dex/DexSprites/Open/Moves")
 entry_text_label = NodePath("Dex/DexSprites/Open/Info/EntryMarquee/Entry")
 dex_complete_sfx = NodePath("DexComplete")
+dex_invalid_sfx = NodePath("InvalidSfx")
 hp = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/HP")
 atk = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/ATK")
 def = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/DEF")
@@ -689,6 +693,7 @@ sdef = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer
 speed = NodePath("Dex/DexSprites/Open/Stats/Control/MarginContainer/VBoxContainer/SPEED")
 shiny_sprite_toggle = NodePath("Settings/MarginContainer/BG/MarginContainer/VBoxContainer/ShinySpriteToggler/Button")
 legacy_cry_button = NodePath("Settings/MarginContainer/BG/MarginContainer/VBoxContainer/LegacyCryToggler/Button")
+cry_volume_slider = NodePath("Settings/MarginContainer/BG/MarginContainer/VBoxContainer/Master Volume/HBoxContainer/MarginContainer/VolumeSlider")
 status_indicator = NodePath("StatusIndicator")
 settings_node = NodePath("Settings")
 move_button_placeholder = NodePath("Dex/DexSprites/Open/Moves/Control/MarginContainer/VScrollBar/VBoxContainer/Placeholder")
@@ -776,12 +781,40 @@ theme_override_constants/h_separation = 10
 theme_override_fonts/font = ExtResource("23_hprl5")
 text = "Play Legacy Cry"
 
-[node name="Placeholder2" type="MarginContainer" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer"]
+[node name="Master Volume" type="MarginContainer" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_right = 40
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer/Master Volume"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer/Master Volume/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("23_hprl5")
+text = "Cry SFX Volume"
+
+[node name="MarginContainer" type="MarginContainer" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer/Master Volume/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+
+[node name="VolumeSlider" type="HSlider" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer/Master Volume/HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+value = 0.5
+
+[node name="Placeholder3" type="MarginContainer" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 30
 
-[node name="Button" type="CheckBox" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer/Placeholder2"]
+[node name="Button" type="CheckBox" parent="Settings/MarginContainer/BG/MarginContainer/VBoxContainer/Placeholder3"]
 layout_mode = 2
 theme_override_constants/outline_size = 15
 theme_override_constants/h_separation = 10
@@ -806,7 +839,6 @@ texture_pressed = ExtResource("5_47pyn")
 texture_hover = ExtResource("5_47pyn")
 
 [node name="Dex" type="Node2D" parent="."]
-position = Vector2(431, 277)
 
 [node name="DexSprites" type="Node2D" parent="Dex"]
 position = Vector2(50, 81)
@@ -1180,7 +1212,15 @@ offset_right = 153.0
 offset_bottom = 64.06
 theme_override_styles/panel = SubResource("StyleBoxFlat_j5v65")
 
-[node name="TextEdit" type="LineEdit" parent="Dex/SearchBar/Panel"]
+[node name="SearchArea" type="Control" parent="Dex/SearchBar/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextEdit" type="LineEdit" parent="Dex/SearchBar/Panel/SearchArea"]
 layout_mode = 1
 offset_left = 4.0
 offset_top = 2.0
@@ -1197,7 +1237,7 @@ middle_mouse_paste_enabled = false
 selecting_enabled = false
 drag_and_drop_selection_enabled = false
 
-[node name="Button" type="Button" parent="Dex/SearchBar/Panel"]
+[node name="Button" type="Button" parent="Dex/SearchBar/Panel/SearchArea"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -1216,7 +1256,7 @@ disabled = true
 icon = ExtResource("6_jraj3")
 flat = true
 
-[node name="SnapToSearchButton" type="Button" parent="Dex/SearchBar/Panel"]
+[node name="SnapToSearchButton" type="Button" parent="Dex/SearchBar/Panel/SearchArea"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -1232,6 +1272,56 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 14
 disabled = true
 text = "Snap to Search"
+
+[node name="GenderSelect" type="Control" parent="Dex/SearchBar/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="LabelMargin" type="MarginContainer" parent="Dex/SearchBar/Panel/GenderSelect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_bottom = 35
+
+[node name="Label" type="Label" parent="Dex/SearchBar/Panel/GenderSelect/LabelMargin"]
+layout_mode = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("23_hprl5")
+theme_override_font_sizes/font_size = 14
+text = "Choose gender"
+
+[node name="ButtonMargin" type="MarginContainer" parent="Dex/SearchBar/Panel/GenderSelect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="FemaleButton" type="Button" parent="Dex/SearchBar/Panel/GenderSelect/ButtonMargin"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Female
+"
+
+[node name="MaleButton" type="Button" parent="Dex/SearchBar/Panel/GenderSelect/ButtonMargin"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+text = "Male"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Dex/SearchBar"]
 libraries = {
@@ -1269,6 +1359,9 @@ polygon = PackedVector2Array(-9, 6, 21, 49, 25, 46, -7, 4)
 
 [node name="DexComplete" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("26_awflw")
+
+[node name="InvalidSfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("27_et2vs")
 
 [node name="StatusIndicator" type="StatusIndicator" parent="."]
 tooltip = "Desktop Pokedex"
@@ -1348,15 +1441,18 @@ timeout = 3.0
 [node name="Timer" type="Timer" parent="."]
 autostart = true
 
+[connection signal="value_changed" from="Settings/MarginContainer/BG/MarginContainer/VBoxContainer/Master Volume/HBoxContainer/MarginContainer/VolumeSlider" to="." method="_on_cry_sfx_volume_changed"]
 [connection signal="pressed" from="Settings/MarginContainer/BG/MarginContainer2/TextureButton" to="." method="toggle_settings"]
-[connection signal="pressed" from="Dex/DexSprites/Open/NavRight" to="." method="_on_move_right_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/NavRight" to="." method="_on_right_button_pressed"]
+[connection signal="pressed" from="Dex/DexSprites/Open/NavRight" to="." method="_on_move_right_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/NavLeft" to="." method="_on_left_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/NavLeft" to="." method="_on_move_left_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/CloseButton" to="." method="_on_close_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/CryButton" to="." method="_on_cry_button_pressed"]
 [connection signal="pressed" from="Dex/DexSprites/Open/FlipButton" to="." method="_on_flip_pressed"]
 [connection signal="item_selected" from="Dex/DexSprites/Open/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="Dex/SearchBar/Panel/GenderSelect/ButtonMargin/FemaleButton" to="." method="search_gender_form" binds= [true]]
+[connection signal="pressed" from="Dex/SearchBar/Panel/GenderSelect/ButtonMargin/MaleButton" to="." method="search_gender_form" binds= [false]]
 [connection signal="button_down" from="Dex/SearchButton" to="." method="search_bar_toggle"]
 [connection signal="mouse_entered" from="Dex/SearchButton" to="." method="_on_search_button_mouse_entered"]
 [connection signal="mouse_exited" from="Dex/SearchButton" to="." method="_on_search_button_mouse_exited"]

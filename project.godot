@@ -15,6 +15,7 @@ config/description="A mini, floating pokedex for your desktop
 Made by @MrStiK101"
 run/main_scene="uid://b6qqwi7forvta"
 config/features=PackedStringArray("4.4", "GL Compatibility")
+boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 0)
 boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false
