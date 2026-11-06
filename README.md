@@ -17,22 +17,23 @@ _Inspired by those mini widgets we had in Windows 7, but for Poké-Geeks lol._
 
 **DONE ✅**
 
-- 🖥️ Floating, draggable desktop window
-- 🪟 Transparent & borderless window
-- 🖱️ Click-through transparent areas
-- 🔍 Pokémon search by NAME or ID
-- 🔊 Pokémon cries
-- 📖 Pokémon descriptions
-- 📊 Base stats
-- ⚔️ Moves
-- ⭐ Abilities
-- 🌐 Pokémon data fetched from the PokéAPI
-- 🎞️ Animated opening/closing Pokédex
-- 🧬 Types
+-  Floating, draggable desktop window
+-  Transparent & borderless window
+-  Click-through transparent areas
+-  Pokémon search by NAME or ID
+-  Pokémon cries
+-  Pokémon descriptions
+-  Base stats
+-  Moves
+-  Animated opening/closing Pokédex
+-  Types
 
 **WIP ⚠️**
-- 🖼️ Pokémon seach by Snippet [REQUIRES YOUR OWN GENAI API KEYS]
-- 🎨 Themes inspired by different generations
+- Pokémon seach by Snippet [REQUIRES YOUR OWN GENAI API KEYS]
+- Themes inspired by different generations
+- Mini desktop pokemons
+- Evolution chains
+- Abilities
 ---
 
 ## 🛠️ Built With
@@ -45,8 +46,7 @@ _Inspired by those mini widgets we had in Windows 7, but for Poké-Geeks lol._
 
 ## 📦 Installation
 
-### Download the latest release
-
-> COMING SOON . . .
+### [Download the latest release](https://github.com/stik101/desktop-pokedex/releases)
+### [Download from ITCH.IO](https://gamo-studios.itch.io/desktop-pokedex)
 
 Download the latest version from the **Releases** section.
